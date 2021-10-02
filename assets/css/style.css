@@ -127,7 +127,7 @@ h1, h2, h3, h4, h5, h6 {
   #header {
     width: 300px;
     background: #fff;
-    border-right: 1px solid #f3efe3;
+    border-right: 1px solid #f5eeeb;
     left: -300px;
   }
 }
@@ -169,7 +169,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: 0.3s;
   font-size: 15px;
   border-radius: 50px;
-  background: #f3efe3;
+  background: #f5eeeb;
   height: 56px;
   width: 100%;
   overflow: hidden;
@@ -504,7 +504,7 @@ section {
 }
 
 .skills .progress-bar-wrap {
-  background: #f3efe3;
+  background: #f5eeeb;
 }
 
 .skills .progress-bar {
