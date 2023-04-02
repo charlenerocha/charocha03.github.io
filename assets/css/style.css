@@ -447,6 +447,10 @@ section {
   margin-bottom: 0;
 }
 
+.about .img-circle {
+  border-radius: 50%;
+}
+
 /*--------------------------------------------------------------
 # Facts
 --------------------------------------------------------------*/
@@ -529,7 +533,7 @@ section {
 # Resume
 --------------------------------------------------------------*/
 .resume .resume-title {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 700;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -577,18 +581,30 @@ section {
   margin-bottom: 10px;
 }
 
-.resume .resume-item h6 {
+.resume h6 {
   font-size: 14px;
   color: #f7f8f9;
-  background: #874d59;
   padding: 5px 15px;
   display: inline-block;
   font-weight: 600;
   margin-bottom: 10px;
 }
 
+.resume .language {
+  background: #ba5959;
+}
+
+.resume .framework {
+  background: #ba7b59;
+}
+
+.resume .tool {
+  background: #994663;
+}
+
 .resume .resume-item ul {
   padding-left: 20px;
+  font-size: 14px;
 }
 
 .resume .resume-item ul li {
@@ -859,7 +875,7 @@ section {
 --------------------------------------------------------------*/
 .services .icon-box {
   text-align: center;
-  padding: 70px 20px 80px 20px;
+  padding: 20px;
   transition: all ease-in-out 0.3s;
   background: #fff;
   box-shadow: 0px 5px 90px 0px rgba(110, 123, 131, 0.05);
@@ -896,7 +912,7 @@ section {
 .services .icon-box h4 {
   font-weight: 600;
   margin: 10px 0 15px 0;
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .services .icon-box h4 a {
