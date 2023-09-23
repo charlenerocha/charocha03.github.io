@@ -186,13 +186,15 @@
                 </div>
                 <div class="resume-button">
                   <a
-                    href="Charlene_Rocha_Resume.pdf"
+                    href="Charlene_Rocha_Resume_GHC.pdf"
                     download
                     target="_blank"
                     id="test"
+                    onclick="openMyPDF('Charlene_Rocha_Resume_GHC.pdf'); return false;"
                     >View my resume</a
                   >
                 </div>
+
                 I'm a third year Software Engineering student at the University
                 of Waterloo seeking
                 <b>Summer 2024 (May 2024 - Aug 2024) SWE internship</b>
@@ -287,5 +289,22 @@
 
     <!-- Template Main JS File -->
     <script src="../assets/js/main.js"></script>
+    <script>
+      function openMyPDF(pdfUrl) {
+        console.log("RAWRRRRRRR");
+        // Open the PDF in a new tab
+        window.open(pdfUrl, "_blank");
+
+        // Trigger the download of the PDF
+        var link = document.createElement("a");
+        link.href = pdfUrl;
+        link.download = "Charlene_Rocha_Resume.pdf";
+        link.target = "_blank";
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    </script>
   </body>
 </html>
