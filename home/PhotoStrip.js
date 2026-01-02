@@ -29,10 +29,10 @@ function PhotoStrip({
 
   const photoStripStyle = {
     position: "absolute",
-    top: typeof position.top === "string" ? position.top : position.top + "px",
+    top: typeof position.top === "string" ? position.top : position.top + "%",
     left:
-      typeof position.left === "string" ? position.left : position.left + "px",
-    width: typeof width === "string" ? width : width + "px",
+      typeof position.left === "string" ? position.left : position.left + "%",
+    width: typeof width === "string" ? width : width + "%",
   };
 
   return (

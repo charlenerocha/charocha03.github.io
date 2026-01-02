@@ -2,6 +2,7 @@ function Element({
   image,
   clickable = false,
   frame = false,
+  hangingFrame = false,
   washiTape = "None",
   position = { top: 0, left: 0 },
   width = 200,
@@ -25,10 +26,10 @@ function Element({
 
   const elementStyle = {
     position: "absolute",
-    top: typeof position.top === "string" ? position.top : position.top + "px",
+    top: typeof position.top === "string" ? position.top : position.top + "%",
     left:
-      typeof position.left === "string" ? position.left : position.left + "px",
-    width: typeof width === "string" ? width : width + "px",
+      typeof position.left === "string" ? position.left : position.left + "%",
+    width: typeof width === "string" ? width : width + "%",
   };
 
   return (
@@ -36,11 +37,19 @@ function Element({
       <div
         className={`element ${clickable ? "clickable" : ""} ${
           frame ? "framed" : ""
-        }`}
+        } ${hangingFrame ? "hanging-frame" : ""}`}
         style={elementStyle}
         onClick={handleClick}
       >
-        {washiTape !== "None" && (
+        {hangingFrame && (
+          <div className="hanging-string">
+            <div className="string-left"></div>
+            <div className="string-right"></div>
+            <div className="suspension-point-left"></div>
+            <div className="suspension-point-right"></div>
+          </div>
+        )}
+        {!hangingFrame && washiTape !== "None" && (
           <div className={`washi-tape washi-${washiTape.toLowerCase()}`}></div>
         )}
         <img src={image} alt="Element" />

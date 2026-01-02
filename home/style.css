@@ -27,12 +27,18 @@ body {
   font-family: Arial, sans-serif;
   min-height: 100vh;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .app {
   position: relative;
-  min-height: 100vh;
-  width: 100%;
+  width: 800px;
+  height: 800px;
+  background-color: rgba(255, 245, 244, 0.1);
+  box-shadow: 0 8px 32px rgba(51, 47, 46, 0.2);
 }
 
 /* Element Styles */
@@ -40,8 +46,6 @@ body {
   position: relative;
   display: inline-block;
   transition: transform 0.2s ease;
-  min-width: 100px;
-  max-width: 90vw;
 }
 
 .element img {
@@ -65,6 +69,70 @@ body {
   box-shadow: 0 4px 8px rgba(51, 47, 46, 0.3);
 }
 
+/* Hanging Frame container */
+.element.hanging-frame {
+  position: relative;
+  padding-top: 45px;
+  display: inline-block;
+}
+
+/* Frame image */
+.element.hanging-frame img {
+  display: block;
+  border: 10px solid var(--color-dark);
+  box-shadow: 0 8px 16px rgba(51, 47, 46, 0.4);
+}
+
+/* String container */
+.hanging-string {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Central pin */
+.hanging-string::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-light-dark);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(51, 47, 46, 0.4);
+  z-index: 3;
+}
+
+/* Left string */
+.string-left {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 2px;
+  height: 45px;
+  background-color: var(--color-light-dark);
+  transform-origin: top center;
+  transform: rotate(-30deg);
+}
+
+/* Right string */
+.string-right {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 2px;
+  height: 45px;
+  background-color: var(--color-light-dark);
+  transform-origin: top center;
+  transform: rotate(30deg);
+}
+
 /* Washi Tape Styles */
 .washi-tape {
   position: absolute;
@@ -79,26 +147,26 @@ body {
 }
 
 .washi-top {
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  height: 25px;
+  top: -0.6%;
+  left: -0.6%;
+  right: -0.6%;
+  height: 13%;
   transform: rotate(-1deg);
 }
 
 .washi-leftedge {
-  top: -5px;
-  left: -5px;
-  bottom: -5px;
-  width: 25px;
+  top: -0.6%;
+  left: -0.6%;
+  bottom: -0.6%;
+  width: 13%;
   transform: rotate(-1deg);
 }
 
 .washi-rightedge {
-  top: -5px;
-  right: -5px;
-  bottom: -5px;
-  width: 25px;
+  top: -0.6%;
+  right: -0.6%;
+  bottom: -0.6%;
+  width: 13%;
   transform: rotate(1deg);
 }
 
@@ -118,8 +186,8 @@ body {
 
 /* Popup (Blue Square) */
 .popup {
-  width: min(400px, 90vw);
-  height: min(400px, 90vw);
+  width: 400px;
+  height: 400px;
   background-color: var(--color-base-brown);
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(51, 47, 46, 0.5);
@@ -130,8 +198,6 @@ body {
   position: relative;
   display: inline-block;
   transition: transform 0.2s ease;
-  min-width: 100px;
-  max-width: 90vw;
 }
 
 .photo-strip-container {
@@ -167,17 +233,21 @@ body {
 }
 
 /* Mobile Responsive Adjustments */
-@media (max-width: 768px) {
-  .element {
-    min-width: 80px;
+@media (max-width: 868px) {
+  body {
+    justify-content: flex-start;
+    padding: 20px 0;
+  }
+
+  .app {
+    width: 100vw;
+    height: 100vw;
+    max-width: 600px;
+    max-height: 600px;
   }
 
   .element.framed img {
     border-width: 4px;
-  }
-
-  .photo-strip {
-    min-width: 80px;
   }
 
   .photo-strip.framed {
@@ -189,11 +259,11 @@ body {
     padding: 4px;
   }
 
-  .washi-top,
-  .washi-leftedge,
-  .washi-rightedge {
-    height: 15px;
-    width: 15px;
+  .popup {
+    width: 90vw;
+    height: 90vw;
+    max-width: 400px;
+    max-height: 400px;
   }
 
   .element.clickable:hover,

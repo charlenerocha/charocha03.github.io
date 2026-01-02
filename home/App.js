@@ -9,8 +9,8 @@ function App() {
         clickable={true}
         frame={true}
         washiTape="Top"
-        position={{ top: "5vh", left: "5vw" }}
-        width="20vw"
+        position={{ top: 5, left: 5 }}
+        width={20}
       />
 
       {/* Non-clickable with left edge washi tape */}
@@ -19,8 +19,8 @@ function App() {
         clickable={false}
         frame={false}
         washiTape="LeftEdge"
-        position={{ top: "10vh", left: "35vw" }}
-        width="18vw"
+        position={{ top: 10, left: 35 }}
+        width={18}
       />
 
       {/* Clickable with frame, no washi tape */}
@@ -29,8 +29,8 @@ function App() {
         clickable={true}
         frame={true}
         washiTape="None"
-        position={{ top: "35vh", left: "8vw" }}
-        width="12vw"
+        position={{ top: 35, left: 8 }}
+        width={12}
       />
 
       {/* Non-clickable with right edge washi tape */}
@@ -39,8 +39,8 @@ function App() {
         clickable={false}
         frame={false}
         washiTape="RightEdge"
-        position={{ top: "28vh", left: "65vw" }}
-        width="15vw"
+        position={{ top: 28, left: 65 }}
+        width={15}
       />
 
       {/* Clickable, no frame, top washi tape */}
@@ -49,8 +49,8 @@ function App() {
         clickable={true}
         frame={false}
         washiTape="Top"
-        position={{ top: "60vh", left: "25vw" }}
-        width="18vw"
+        position={{ top: 60, left: 25 }}
+        width={18}
       />
 
       {/* Simple element with frame only */}
@@ -59,8 +59,17 @@ function App() {
         clickable={true}
         frame={true}
         washiTape="None"
-        position={{ top: "55vh", left: "55vw" }}
-        width="14vw"
+        position={{ top: 55, left: 55 }}
+        width={14}
+      />
+
+      {/* Hanging frame with map */}
+      <Element
+        image="assets/map.jpg"
+        clickable={true}
+        hangingFrame={true}
+        position={{ top: 40, left: 40 }}
+        width={16}
       />
 
       {/* ========== PHOTOSTRIP SAMPLES ========== */}
@@ -76,8 +85,8 @@ function App() {
         clickable={true}
         frame={true}
         washiTape="None"
-        position={{ top: "15vh", left: "75vw" }}
-        width="10vw"
+        position={{ top: 15, left: 75 }}
+        width={10}
       />
 
       {/* 5-image photostrip with top washi tape */}
@@ -92,8 +101,8 @@ function App() {
         clickable={true}
         frame={false}
         washiTape="Top"
-        position={{ top: "70vh", left: "50vw" }}
-        width="14vw"
+        position={{ top: 70, left: 50 }}
+        width={14}
       />
 
       {/* 3-image photostrip with left washi tape and frame */}
@@ -106,8 +115,8 @@ function App() {
         clickable={false}
         frame={true}
         washiTape="LeftEdge"
-        position={{ top: "75vh", left: "10vw" }}
-        width="12vw"
+        position={{ top: 75, left: 10 }}
+        width={12}
       />
     </div>
   );
