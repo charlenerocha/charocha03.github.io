@@ -27,7 +27,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 225, 168, 0.849);
 }
 
 .content-wrapper {
@@ -66,7 +66,22 @@ body {
   left: 0;
   right: 0;
   height: 15px;
-  background: linear-gradient(to bottom, #d1ac92, #855d32);
+  background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.05) 2px,
+      rgba(0, 0, 0, 0.05) 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0, 0, 0, 0.08) 1px,
+      rgba(0, 0, 0, 0.08) 2px
+    ),
+    linear-gradient(to bottom, #664116, #5d3d1a);
+  background-size: 100% 100%, 100% 100%, 100% 100%;
   border-radius: 2px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -98,7 +113,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: visible;
@@ -112,13 +126,10 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent);
   border-radius: 8px;
 }
 
 .shelf-item:hover {
-  transform: translateY(-10px) scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
 
@@ -155,7 +166,14 @@ body {
   object-fit: contain;
   object-position: bottom center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 4px 12px rgba(188, 176, 150, 0.4))
+    drop-shadow(0 2px 6px rgba(255, 255, 255, 0.2));
+}
+
+.shelf-item:hover .item-image {
+  transform: scale(1.1);
+  filter: drop-shadow(0 6px 16px rgba(185, 185, 185, 0.5))
+    drop-shadow(0 3px 8px rgba(255, 255, 255, 0.3));
 }
 
 .item-placeholder {
@@ -179,22 +197,6 @@ body {
   opacity: 0.7;
 }
 
-.info-panel {
-  margin-top: 30px;
-  text-align: center;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.info-panel p {
-  color: #333;
-  font-size: 1rem;
-  margin: 8px 0;
-  font-weight: 500;
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .app-title {
@@ -213,10 +215,6 @@ body {
   .item-name {
     font-size: 0.8rem;
   }
-
-  .info-panel p {
-    font-size: 0.9rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -231,10 +229,6 @@ body {
 
   .shelves-container {
     padding: 10px;
-  }
-
-  .info-panel {
-    padding: 15px;
   }
 }
 

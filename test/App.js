@@ -5,37 +5,50 @@ const ITEMS = [
   {
     id: 1,
     name: "Monstera",
-    color: "#765e2d0f",
     width: 1.2,
     image: "assets/plants/monstera.png",
   },
   {
     id: 2,
     name: "Golden Pothos",
-    color: "#765e2d0f",
     width: 1.0,
     image: "assets/plants/golden-pothos.png",
   },
   {
     id: 3,
     name: "Aloe Vera",
-    color: "#765e2d0f",
     width: 0.9,
     image: "assets/plants/aloe-vera.png",
   },
   {
     id: 4,
     name: "Philodendron",
-    color: "#765e2d0f",
     width: 5.6,
     image: "assets/map.jpg",
   },
   {
     id: 5,
     name: "Succulent",
-    color: "#765e2d0f",
     width: 0.8,
     image: "assets/plants/succulent.png",
+  },
+  {
+    id: 6,
+    name: "Lcd Monitor",
+    width: 2.0,
+    image: "assets/lcd.png",
+  },
+  {
+    id: 7,
+    name: "Lamp",
+    width: 1.5,
+    image: "assets/lighting/lamp.png",
+  },
+  {
+    id: 8,
+    name: "Gumball",
+    width: 1.5,
+    image: "assets/gumball.png",
   },
 ];
 
@@ -47,7 +60,6 @@ function ShelfItem({ item, width, height }) {
       style={{
         width: `${width}px`,
         height: `${height}px`,
-        backgroundColor: item.color,
       }}
     >
       {item.image ? (
@@ -165,11 +177,6 @@ function DynamicShelves() {
               </div>
             </div>
           ))}
-        </div>
-        <div className="info-panel">
-          <p>Items per shelf: {shelves.length > 0 ? shelves[0].length : 0}</p>
-          <p>Total shelves: {shelves.length}</p>
-          <p>Base size: {Math.round(itemSize)}px</p>
         </div>
       </div>
     </div>
