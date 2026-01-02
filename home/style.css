@@ -1,0 +1,203 @@
+/* Color Constants */
+:root {
+  --color-light: #fff5f4;
+  --color-accent-pink: #f4d1d1;
+  --color-accent-green: #c3c49f;
+  --color-base-brown: #d6b89e;
+  --color-light-dark: #5c524a;
+  --color-dark: #332f2e;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: linear-gradient(
+      rgba(244, 209, 209, 0.4),
+      rgba(244, 209, 209, 0.4)
+    ),
+    url("assets/background.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.app {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Element Styles */
+.element {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.2s ease;
+  min-width: 100px;
+  max-width: 90vw;
+}
+
+.element img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Clickable hover effect */
+.element.clickable {
+  cursor: pointer;
+}
+
+.element.clickable:hover {
+  transform: scale(1.05);
+}
+
+/* Frame */
+.element.framed img {
+  border: 8px solid var(--color-light);
+  box-shadow: 0 4px 8px rgba(51, 47, 46, 0.3);
+}
+
+/* Washi Tape Styles */
+.washi-tape {
+  position: absolute;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-light),
+    var(--color-light) 10px,
+    var(--color-accent-pink) 10px,
+    var(--color-accent-pink) 20px
+  );
+  z-index: 1;
+}
+
+.washi-top {
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  height: 25px;
+  transform: rotate(-1deg);
+}
+
+.washi-leftedge {
+  top: -5px;
+  left: -5px;
+  bottom: -5px;
+  width: 25px;
+  transform: rotate(-1deg);
+}
+
+.washi-rightedge {
+  top: -5px;
+  right: -5px;
+  bottom: -5px;
+  width: 25px;
+  transform: rotate(1deg);
+}
+
+/* Popup Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(51, 47, 46, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Popup (Blue Square) */
+.popup {
+  width: min(400px, 90vw);
+  height: min(400px, 90vw);
+  background-color: var(--color-base-brown);
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(51, 47, 46, 0.5);
+}
+
+/* PhotoStrip Styles */
+.photo-strip {
+  position: relative;
+  display: inline-block;
+  transition: transform 0.2s ease;
+  min-width: 100px;
+  max-width: 90vw;
+}
+
+.photo-strip-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: var(--color-dark);
+  padding: 16px;
+  border-radius: 2px;
+}
+
+.strip-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+/* PhotoStrip clickable hover effect */
+.photo-strip.clickable {
+  cursor: pointer;
+}
+
+.photo-strip.clickable:hover {
+  transform: scale(1.05);
+}
+
+/* PhotoStrip frame */
+.photo-strip.framed {
+  border: 8px solid var(--color-light);
+  box-shadow: 0 4px 8px rgba(51, 47, 46, 0.3);
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  .element {
+    min-width: 80px;
+  }
+
+  .element.framed img {
+    border-width: 4px;
+  }
+
+  .photo-strip {
+    min-width: 80px;
+  }
+
+  .photo-strip.framed {
+    border-width: 4px;
+  }
+
+  .photo-strip-container {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .washi-top,
+  .washi-leftedge,
+  .washi-rightedge {
+    height: 15px;
+    width: 15px;
+  }
+
+  .element.clickable:hover,
+  .photo-strip.clickable:hover {
+    transform: scale(1.02);
+  }
+}
