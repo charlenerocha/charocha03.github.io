@@ -1,5 +1,13 @@
 const { useState, useEffect, useRef } = React;
 
+// Action handlers for shelf items
+const ITEM_ACTIONS = {
+  openLink: (url) => {
+    window.open(url, "_blank");
+  },
+  // Add more action handlers here as needed for popups, modals, etc.
+};
+
 // Sample items data with varying widths (width is a multiplier of base size)
 const ITEMS = [
   {
@@ -42,7 +50,7 @@ const ITEMS = [
     id: 7,
     name: "Lamp",
     width: 1.5,
-    image: "assets/lighting/lamp.png",
+    image: "assets/lighting/lamp3.png",
   },
   {
     id: 8,
@@ -50,21 +58,72 @@ const ITEMS = [
     width: 1.5,
     image: "assets/gumball.png",
   },
+  {
+    id: 9,
+    name: "instagram",
+    width: 0.4,
+    image: "assets/social/instagram.png",
+    verticalAlign: 20,
+    action: {
+      type: "openLink",
+      url: "https://www.instagram.com/charlenerocha_/",
+    },
+  },
+  {
+    id: 10,
+    name: "linkedin",
+    width: 0.4,
+    image: "assets/social/linkedin.png",
+    verticalAlign: 30,
+    action: {
+      type: "openLink",
+      url: "https://www.linkedin.com/in/charlenerochaa/",
+    },
+  },
+  {
+    id: 11,
+    name: "website",
+    width: 0.4,
+    image: "assets/social/internet.png",
+    action: {
+      type: "openLink",
+      url: "https://www.charlenerocha.com",
+    },
+    verticalAlign: 20,
+  },
 ];
 
 // ShelfItem Component
 function ShelfItem({ item, width, height }) {
+  const handleItemClick = () => {
+    if (item.action) {
+      const { type, url } = item.action;
+      const actionHandler = ITEM_ACTIONS[type];
+      if (actionHandler) {
+        actionHandler(url);
+      }
+    }
+  };
+
   return (
     <div
       className="shelf-item"
       style={{
         width: `${width}px`,
         height: `${height}px`,
+        cursor: item.action ? "pointer" : "default",
+        "--vertical-align": `${item.verticalAlign ?? 100}%`,
       }}
+      onClick={handleItemClick}
     >
+      {item.action && <div className="interactive"></div>}
       {item.image ? (
         <div className="item-image-container">
-          <img src={item.image} alt={item.name} className="item-image" />
+          <img
+            src={item.image}
+            alt={item.name}
+            className={`item-image ${item.action ? "interactive" : ""}`}
+          />
         </div>
       ) : (
         <div className="item-placeholder">
@@ -83,7 +142,7 @@ function DynamicShelves() {
 
   const MIN_ITEM_SIZE = 80;
   const MAX_ITEM_SIZE = 150;
-  const ITEM_GAP = 20;
+  const ITEM_GAP = 5;
   const SHELF_VERTICAL_GAP = 30;
 
   const calculateLayout = () => {
@@ -160,7 +219,6 @@ function DynamicShelves() {
   return (
     <div className="app-container">
       <div className="content-wrapper">
-        <h1 className="app-title">Dynamic Shelf Display</h1>
         <div className="shelves-container" ref={containerRef}>
           {shelves.map((shelfItems, shelfIndex) => (
             <div key={shelfIndex} className="shelf">
