@@ -19,6 +19,100 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+/* Subtle sparkle overlay effect */
+.sparkles-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.sparkles-overlay::before,
+.sparkles-overlay::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.9) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  box-shadow: 120px 80px 0 -1px rgba(255, 255, 255, 0.6),
+    240px 150px 0 0px rgba(255, 255, 255, 0.5),
+    360px 90px 0 -1px rgba(255, 255, 255, 0.7),
+    480px 200px 0 0px rgba(255, 255, 255, 0.4),
+    600px 120px 0 -1px rgba(255, 255, 255, 0.6),
+    720px 180px 0 0px rgba(255, 255, 255, 0.5),
+    840px 60px 0 -1px rgba(255, 255, 255, 0.7),
+    960px 140px 0 0px rgba(255, 255, 255, 0.4),
+    80px 220px 0 -1px rgba(255, 255, 255, 0.5),
+    200px 280px 0 0px rgba(255, 255, 255, 0.6),
+    320px 320px 0 -1px rgba(255, 255, 255, 0.4),
+    440px 260px 0 0px rgba(255, 255, 255, 0.7),
+    560px 380px 0 -1px rgba(255, 255, 255, 0.5),
+    680px 340px 0 0px rgba(255, 255, 255, 0.6),
+    800px 300px 0 -1px rgba(255, 255, 255, 0.4),
+    920px 420px 0 0px rgba(255, 255, 255, 0.5),
+    100px 460px 0 -1px rgba(255, 255, 255, 0.6),
+    260px 500px 0 0px rgba(255, 255, 255, 0.4),
+    380px 440px 0 -1px rgba(255, 255, 255, 0.7),
+    500px 520px 0 0px rgba(255, 255, 255, 0.5),
+    620px 480px 0 -1px rgba(255, 255, 255, 0.6),
+    740px 560px 0 0px rgba(255, 255, 255, 0.4),
+    860px 500px 0 -1px rgba(255, 255, 255, 0.5),
+    980px 540px 0 0px rgba(255, 255, 255, 0.6);
+  animation: sparkleFloat 8s linear infinite;
+}
+
+.sparkles-overlay::after {
+  animation-delay: -4s;
+  animation-duration: 10s;
+  box-shadow: 150px 100px 0 -1px rgba(255, 255, 255, 0.5),
+    300px 180px 0 0px rgba(255, 255, 255, 0.4),
+    450px 120px 0 -1px rgba(255, 255, 255, 0.6),
+    600px 220px 0 0px rgba(255, 255, 255, 0.5),
+    750px 160px 0 -1px rgba(255, 255, 255, 0.4),
+    900px 200px 0 0px rgba(255, 255, 255, 0.6),
+    1050px 80px 0 -1px rgba(255, 255, 255, 0.5),
+    180px 300px 0 0px rgba(255, 255, 255, 0.4),
+    330px 360px 0 -1px rgba(255, 255, 255, 0.6),
+    480px 340px 0 0px rgba(255, 255, 255, 0.5),
+    630px 400px 0 -1px rgba(255, 255, 255, 0.4),
+    780px 380px 0 0px rgba(255, 255, 255, 0.6),
+    930px 440px 0 -1px rgba(255, 255, 255, 0.5),
+    1080px 420px 0 0px rgba(255, 255, 255, 0.4),
+    210px 520px 0 -1px rgba(255, 255, 255, 0.5),
+    360px 560px 0 0px rgba(255, 255, 255, 0.6),
+    510px 500px 0 -1px rgba(255, 255, 255, 0.4),
+    660px 580px 0 0px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes sparkleFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(-80px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0);
+  }
 }
 
 .page-title {
@@ -248,4 +342,166 @@ body {
 .shelf-item,
 .shelf-items {
   transition: all 0.3s ease-in-out;
+}
+
+/* Map with Pins Styling */
+.map-container {
+  position: relative;
+  overflow: visible;
+}
+
+.map-container .item-image-container {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.map-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: block;
+}
+
+.pins-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -100%) scale(1);
+  pointer-events: auto;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: pinDrop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+  z-index: 5;
+  transition: transform 0.2s ease-out, filter 0.2s ease-out;
+}
+
+@keyframes pinDrop {
+  0% {
+    transform: translate(-50%, -200%) scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -95%) scale(1.05);
+  }
+  85% {
+    transform: translate(-50%, -102%) scale(0.95);
+  }
+  100% {
+    transform: translate(-50%, -100%) scale(1);
+    opacity: 1;
+  }
+}
+
+.pin-head {
+  width: 10px;
+  height: 10px;
+  background: #d63031;
+  border-radius: 50%;
+  border: 1px solid #f8e8d7ad;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pin-head::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 5px;
+  background: linear-gradient(to bottom, #6b5344, #7d6954);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.pin-point {
+  display: none;
+}
+
+.map-pin:hover {
+  transform: translate(-50%, -100%) scale(1.2);
+  z-index: 10;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.map-pin:hover .pin-head {
+  background: #ff4757;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Pin Tooltip */
+.pin-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #8b7355;
+  border-radius: 6px;
+  padding: 8px 12px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  animation: tooltipFadeIn 0.2s ease-out;
+  z-index: 100;
+}
+
+.pin-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #8b7355;
+}
+
+.tooltip-country {
+  font-family: "Fredoka", sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #5d3d1a;
+  margin-bottom: 2px;
+}
+
+.tooltip-year {
+  font-family: "Fredoka", sans-serif;
+  font-size: 0.75rem;
+  color: #8b7355;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }

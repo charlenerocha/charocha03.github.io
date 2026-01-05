@@ -93,6 +93,113 @@ const ITEMS = [
   },
 ];
 
+// MapWithPins Component
+function MapWithPins({ item, width, height }) {
+  const imageRef = useRef(null);
+  const [imageDimensions, setImageDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+  const [activePin, setActivePin] = useState(null);
+
+  useEffect(() => {
+    const updateImageDimensions = () => {
+      if (imageRef.current) {
+        setImageDimensions({
+          width: imageRef.current.offsetWidth,
+          height: imageRef.current.offsetHeight,
+        });
+      }
+    };
+
+    // Update on image load
+    if (imageRef.current) {
+      imageRef.current.addEventListener("load", updateImageDimensions);
+    }
+
+    // Update on resize
+    window.addEventListener("resize", updateImageDimensions);
+
+    // Initial update
+    updateImageDimensions();
+
+    // Click outside to close tooltip
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".map-pin")) {
+        setActivePin(null);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("resize", updateImageDimensions);
+      document.removeEventListener("click", handleClickOutside);
+      if (imageRef.current) {
+        imageRef.current.removeEventListener("load", updateImageDimensions);
+      }
+    };
+  }, []);
+
+  const handlePinClick = (e, pinId) => {
+    e.stopPropagation();
+    setActivePin(activePin === pinId ? null : pinId);
+  };
+
+  // Check if MAP_PINS is defined (from MapPins.js)
+  const pins = typeof MAP_PINS !== "undefined" ? MAP_PINS : [];
+
+  return (
+    <div
+      className="shelf-item map-container"
+      style={{
+        width: `${width}px`,
+        height: `${height}px`,
+        position: "relative",
+      }}
+    >
+      <div className="item-image-container">
+        <img
+          ref={imageRef}
+          src={item.image}
+          alt={item.name}
+          className="item-image map-image"
+        />
+        {imageDimensions.width > 0 && (
+          <div
+            className="pins-overlay"
+            style={{
+              width: `${imageDimensions.width}px`,
+              height: `${imageDimensions.height}px`,
+            }}
+          >
+            {pins.map((pin) => (
+              <div
+                key={pin.id}
+                className="map-pin"
+                style={{
+                  left: `${pin.x}%`,
+                  top: `${pin.y}%`,
+                  animationDelay: `${pin.delay}s`,
+                }}
+                onClick={(e) => handlePinClick(e, pin.id)}
+              >
+                <div className="pin-head"></div>
+                <div className="pin-point"></div>
+                {activePin === pin.id && (
+                  <div className="pin-tooltip">
+                    <div className="tooltip-country">{pin.country}</div>
+                    <div className="tooltip-year">{pin.year}</div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ShelfItem Component
 function ShelfItem({ item, width, height }) {
   const handleItemClick = () => {
@@ -104,6 +211,11 @@ function ShelfItem({ item, width, height }) {
       }
     }
   };
+
+  // Check if this is the map item
+  if (item.id === 4) {
+    return <MapWithPins item={item} width={width} height={height} />;
+  }
 
   return (
     <div
