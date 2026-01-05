@@ -31,7 +31,7 @@ const ITEMS = [
   {
     id: 4,
     name: "Philodendron",
-    width: 5.6,
+    width: 1.8,
     image: "assets/map.jpg",
   },
   {
