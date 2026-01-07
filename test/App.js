@@ -144,8 +144,9 @@ function AlbumFan() {
       className="album-fan"
       onClick={(e) => {
         // If click is on an album item or the boombox image, ignore.
-        if (e.target.closest && e.target.closest('.album-fan-item')) return;
-        if (e.target.closest && e.target.closest('img[src$="boombox.png"]')) return;
+        if (e.target.closest && e.target.closest(".album-fan-item")) return;
+        if (e.target.closest && e.target.closest('img[src$="boombox.png"]'))
+          return;
         setOpen(false);
       }}
       style={{
