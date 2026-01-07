@@ -1,5 +1,26 @@
 const { useState, useEffect, useRef } = React;
 
+// Mirror faces path and styles
+const MIRROR_FACES_PATH = "assets/mirror/faces/";
+// inject minimal styles for mirror face animation once
+(function injectMirrorStyles() {
+  try {
+    if (document.getElementById("mirror-face-styles")) return;
+    const css = `
+      .mirror-face-container{position:absolute;left:50%;transform:translateX(-50%);bottom:0;pointer-events:none;z-index:2000;}
+      .mirror-face{width:56px;max-width:120px;border-radius:8px;opacity:0;transform:translateY(40px) scale(0.98);transition:transform 360ms cubic-bezier(.2,.9,.2,1),opacity 360ms ease;}
+      .mirror-face.show{opacity:1;transform:translateY(0) scale(1);}
+      .mirror-face.hide{opacity:0;transform:translateY(-12px) scale(0.96);transition:transform 360ms ease,opacity 260ms ease;}
+    `;
+    const s = document.createElement("style");
+    s.id = "mirror-face-styles";
+    s.appendChild(document.createTextNode(css));
+    document.head.appendChild(s);
+  } catch (e) {
+    // ignore in non-browser env
+  }
+})();
+
 // AlbumFan Component: handles loading album manifest and animating albums out from boombox
 function AlbumFan() {
   const [albums, setAlbums] = useState([]);
@@ -220,6 +241,7 @@ const ITEMS = [
     name: "Pictures",
     width: 1.0,
     image: "assets/mirror/frame.png",
+    action: { type: "mirror" },
   },
   {
     id: 2,
@@ -509,8 +531,66 @@ function GumballGame({ onClose }) {
 // ShelfItem Component
 function ShelfItem({ item, width, height }) {
   const [showGumballGame, setShowGumballGame] = useState(false);
+  const [faceSrc, setFaceSrc] = useState(null);
+  const [facePhase, setFacePhase] = useState(""); // "show" | "hide" | ""
+  const containerRef = useRef(null);
 
-  const handleItemClick = () => {
+  // manage face show/hide lifecycles
+  useEffect(() => {
+    if (!faceSrc) return;
+    let t1 = setTimeout(() => setFacePhase("show"), 20);
+    // hide after 1.4s
+    let t2 = setTimeout(() => setFacePhase("hide"), 1400);
+    // remove after 1.8s
+    let t3 = setTimeout(() => {
+      setFaceSrc(null);
+      setFacePhase("");
+    }, 1800);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [faceSrc]);
+
+  const handleMirrorClick = async (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    // Only load faces from the test assets directory per project rules
+    const tryPaths = [`${MIRROR_FACES_PATH}faces.json`];
+    for (const p of tryPaths) {
+      try {
+        const resp = await fetch(p);
+        if (!resp.ok) {
+          console.debug("mirror: fetch not ok", p, resp.status);
+          continue;
+        }
+        const list = await resp.json();
+        if (!list || list.length === 0) {
+          console.debug("mirror: empty list", p);
+          continue;
+        }
+        const name = list[Math.floor(Math.random() * list.length)];
+        const base = p.replace(/faces.json$/, "");
+        setFaceSrc(base + name);
+        console.debug("mirror: using", base + name);
+        return;
+      } catch (err) {
+        console.debug("mirror: fetch failed", p, err);
+      }
+    }
+    // Final fallback to bundled names (works even without JSON)
+    const FALLBACK = ["face1.svg", "face2.svg", "face3.svg"];
+    const name = FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
+    setFaceSrc(MIRROR_FACES_PATH + name);
+  };
+
+  const handleItemClick = (e) => {
+    // If this item has a mirror action, show a face
+    if (item.action && item.action.type === "mirror") {
+      handleMirrorClick(e);
+      return;
+    }
+
     if (item.action) {
       const { type, url } = item.action;
       const actionHandler = ITEM_ACTIONS[type];
@@ -540,6 +620,7 @@ function ShelfItem({ item, width, height }) {
           "--vertical-align": `${item.verticalAlign ?? 100}%`,
         }}
         onClick={handleItemClick}
+        ref={containerRef}
       >
         {item.action && <div className="interactive"></div>}
         {item.image ? (
@@ -550,7 +631,7 @@ function ShelfItem({ item, width, height }) {
               className={`item-image ${item.action ? "interactive" : ""}`}
               onClick={(e) => {
                 e.stopPropagation();
-                handleItemClick();
+                handleItemClick(e);
               }}
               style={{ cursor: item.action ? "pointer" : "default" }}
             />
@@ -558,6 +639,19 @@ function ShelfItem({ item, width, height }) {
         ) : (
           <div className="item-placeholder">
             <span className="placeholder-icon">📦</span>
+          </div>
+        )}
+        {/* mirror face overlay (appears from bottom then disappears) */}
+        {faceSrc && (
+          <div
+            className="mirror-face-container"
+            style={{ bottom: `${Math.max(6, Math.round(height * 0.15))}px` }}
+          >
+            <img
+              src={faceSrc}
+              alt="face"
+              className={`mirror-face ${facePhase}`}
+            />
           </div>
         )}
       </div>
