@@ -11,6 +11,7 @@ const MAP_PINS = [
     x: 20,
     y: 35,
     delay: 0,
+    shape: "star", // "star" or "heart"
   },
   {
     id: 2,
@@ -19,6 +20,7 @@ const MAP_PINS = [
     x: 48,
     y: 28,
     delay: 0.2,
+    shape: "heart",
   },
   {
     id: 3,
@@ -27,6 +29,7 @@ const MAP_PINS = [
     x: 49,
     y: 32,
     delay: 0.4,
+    shape: "star",
   },
   {
     id: 4,
@@ -35,6 +38,7 @@ const MAP_PINS = [
     x: 82,
     y: 38,
     delay: 0.6,
+    shape: "heart",
   },
   {
     id: 5,
@@ -43,8 +47,9 @@ const MAP_PINS = [
     x: 80,
     y: 75,
     delay: 0.8,
+    shape: "star",
   },
-  // Add more pins here - just specify country, x, y coordinates, year, and delay
+  // Add more pins here - just specify country, x, y coordinates, year, delay, and shape
   // Example:
   // {
   //   id: 6,
@@ -53,6 +58,7 @@ const MAP_PINS = [
   //   x: 35,
   //   y: 68,
   //   delay: 1.0,
+  //   shape: "heart",
   // },
 ];
 
