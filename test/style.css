@@ -508,6 +508,9 @@ body {
   z-index: 100;
 }
 
+.album-fan .album-fan-item {
+  position: absolute;
+}
 .pin-tooltip::after {
   content: "";
   position: absolute;

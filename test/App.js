@@ -260,12 +260,20 @@ const ITEMS = [
     action: { type: "toggleAlbums" },
   },
   {
-    id: 7,
-    name: "Lamp",
-    width: 0.9,
-    image: "assets/lighting/lamp3.png",
+    id: 8,
+    name: "Gumball",
+    width: 0.8,
+    image: "assets/gumball/gumball.png",
+    action: {
+      type: "openGumballGame",
+    },
   },
-
+  {
+    id: 8,
+    name: "Book",
+    width: 0.8,
+    image: "assets/random/book.avif",
+  },
   {
     id: 9,
     name: "instagram",
@@ -300,13 +308,10 @@ const ITEMS = [
     verticalAlign: 20,
   },
   {
-    id: 8,
-    name: "Gumball",
-    width: 0.8,
-    image: "assets/gumball/gumball.png",
-    action: {
-      type: "openGumballGame",
-    },
+    id: 7,
+    name: "Lamp",
+    width: 0.9,
+    image: "assets/lighting/lamp3.png",
   },
 ];
 
