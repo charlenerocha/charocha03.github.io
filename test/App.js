@@ -334,6 +334,7 @@ const ITEMS = [
     name: "Lamp",
     width: 0.9,
     image: "assets/lighting/lamp3.png",
+    action: { type: "toggleLamp" },
   },
 ];
 
@@ -515,12 +516,12 @@ function GumballGame({ onClose }) {
                 className="gumball-sticker"
               />
             </div>
-            <button
+            {/* <button
               className="gumball-button"
               onClick={() => setGameState("initial")}
             >
               Try Again
-            </button>
+            </button> */}
           </>
         )}
       </div>
@@ -534,6 +535,7 @@ function ShelfItem({ item, width, height }) {
   const [faceSrc, setFaceSrc] = useState(null);
   const [facePhase, setFacePhase] = useState(""); // "show" | "hide" | ""
   const containerRef = useRef(null);
+  const [isLit, setIsLit] = useState(false);
 
   // manage face show/hide lifecycles
   useEffect(() => {
@@ -591,6 +593,12 @@ function ShelfItem({ item, width, height }) {
       return;
     }
 
+    // Toggle lamp lit state when lamp action is present
+    if (item.action && item.action.type === "toggleLamp") {
+      setIsLit((v) => !v);
+      return;
+    }
+
     if (item.action) {
       const { type, url } = item.action;
       const actionHandler = ITEM_ACTIONS[type];
@@ -633,7 +641,13 @@ function ShelfItem({ item, width, height }) {
                 e.stopPropagation();
                 handleItemClick(e);
               }}
-              style={{ cursor: item.action ? "pointer" : "default" }}
+              style={{
+                cursor: item.action ? "pointer" : "default",
+                filter: isLit
+                  ? "brightness(1.2) drop-shadow(0 0 12px rgba(255, 226, 81, 0.48))"
+                  : "none",
+                transition: "filter 220ms ease, transform 120ms ease",
+              }}
             />
           </div>
         ) : (
