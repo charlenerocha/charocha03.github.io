@@ -220,6 +220,10 @@ const ITEM_ACTIONS = {
     // Handled by component state
     return "gumballGame";
   },
+  openBookRecs: () => {
+    // signal to ShelfItem to open book recommendations popup
+    return "openBookRecs";
+  },
   toggleAlbums: () => {
     // dispatch a custom event the AlbumFan listens for
     const ev = new CustomEvent("toggleAlbumFan");
@@ -277,7 +281,7 @@ const ITEMS = [
   {
     id: 12,
     name: "music",
-    width: 0.8,
+    width: 0.6,
     image: "assets/music/boombox.png",
     action: { type: "toggleAlbums" },
   },
@@ -291,17 +295,18 @@ const ITEMS = [
     },
   },
   {
-    id: 8,
-    name: "Book",
-    width: 0.8,
-    image: "assets/random/book.avif",
+    id: 13,
+    name: "Books",
+    width: 1.5,
+    image: "assets/books/books (1).png",
+    action: { type: "openBookRecs" },
   },
   {
     id: 9,
     name: "instagram",
     width: 0.4,
     image: "assets/social/instagram.png",
-    verticalAlign: 20,
+    verticalAlign: 30,
     action: {
       type: "openLink",
       url: "https://www.instagram.com/charlenerocha_/",
@@ -312,7 +317,7 @@ const ITEMS = [
     name: "linkedin",
     width: 0.4,
     image: "assets/social/linkedin.png",
-    verticalAlign: 30,
+    verticalAlign: 50,
     action: {
       type: "openLink",
       url: "https://www.linkedin.com/in/charlenerochaa/",
@@ -327,12 +332,12 @@ const ITEMS = [
       type: "openLink",
       url: "https://www.charlenerocha.com",
     },
-    verticalAlign: 20,
+    verticalAlign: 30,
   },
   {
     id: 7,
     name: "Lamp",
-    width: 0.9,
+    width: 0.7,
     image: "assets/lighting/lamp3.png",
     action: { type: "toggleLamp" },
   },
@@ -529,9 +534,135 @@ function GumballGame({ onClose }) {
   );
 }
 
+// BookRecs Component: similar behavior to GumballGame but loads recommendation images
+function BookRecs({ onClose }) {
+  const [state, setState] = useState("initial"); // 'initial' | 'thinking' | 'result'
+  const [selected, setSelected] = useState(null);
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    // Load manifest as single source of truth. Manifest must be an array of
+    // strings (filenames) or objects { file: "name.ext", note: "reason" }.
+    const manifestPath = "assets/books/recommended/recommendations.json";
+
+    (async () => {
+      try {
+        const r = await fetch(manifestPath);
+        if (!r.ok) {
+          console.warn(
+            "BookRecs: recommendations manifest not found:",
+            manifestPath
+          );
+          setList([]);
+          return;
+        }
+        const arr = await r.json();
+        if (!arr || !arr.length) {
+          setList([]);
+          return;
+        }
+        const normalized = arr
+          .map((item) => {
+            if (typeof item === "string") {
+              return { src: `assets/books/recommended/${item}`, note: "" };
+            }
+            if (item && typeof item === "object") {
+              const file = item.file || item.filename || item.name || item.src;
+              return {
+                src: file ? `assets/books/recommended/${file}` : null,
+                note: item.note || item.description || "",
+              };
+            }
+            return null;
+          })
+          .filter(Boolean);
+        setList(normalized);
+      } catch (err) {
+        console.warn("BookRecs: failed loading manifest", err);
+        setList([]);
+      }
+    })();
+  }, []);
+
+  const handleGet = () => {
+    setState("thinking");
+    setTimeout(() => {
+      if (!list || list.length === 0) {
+        setSelected(null);
+        setState("result");
+        return;
+      }
+      const pick = list[Math.floor(Math.random() * list.length)];
+      setSelected(pick);
+      setState("result");
+    }, 800);
+  };
+
+  const handleOverlayClick = (e) => {
+    if (
+      e.target.classList.contains("gumball-overlay") ||
+      e.target.classList.contains("book-overlay")
+    ) {
+      onClose();
+    }
+  };
+
+  return (
+    <div className="gumball-overlay book-overlay" onClick={handleOverlayClick}>
+      <div className="gumball-popup">
+        {state === "initial" && (
+          <>
+            <p className="gumball-description">
+              Click to get a book recommendation!
+            </p>
+            <button className="gumball-button" onClick={handleGet}>
+              Recommend a book
+            </button>
+          </>
+        )}
+
+        {state === "thinking" && (
+          <div className="gumball-thinking">
+            <div className="thinking-spinner"></div>
+            <p className="thinking-text">Picking a recommendation...</p>
+          </div>
+        )}
+
+        {state === "result" && (
+          <>
+            <div className="gumball-result">
+              {selected ? (
+                <div style={{ textAlign: "center" }}>
+                  <img
+                    src={selected.src}
+                    alt="recommendation"
+                    className="gumball-sticker"
+                  />
+                  <p className="book-note" style={{ marginTop: 12 }}>
+                    {selected.note}
+                  </p>
+                </div>
+              ) : (
+                <div style={{ padding: 16 }}>No recommendations available.</div>
+              )}
+            </div>
+            {/* <button
+              className="gumball-button"
+              onClick={() => setState("initial")}
+            >
+              Recommend another
+            </button> */}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ShelfItem Component
 function ShelfItem({ item, width, height }) {
   const [showGumballGame, setShowGumballGame] = useState(false);
+  const [showBookRecs, setShowBookRecs] = useState(false);
   const [faceSrc, setFaceSrc] = useState(null);
   const [facePhase, setFacePhase] = useState(""); // "show" | "hide" | ""
   const containerRef = useRef(null);
@@ -608,6 +739,9 @@ function ShelfItem({ item, width, height }) {
           console.log("Opening gumball game!");
           setShowGumballGame(true);
         }
+        if (result === "openBookRecs") {
+          setShowBookRecs(true);
+        }
       }
     }
   };
@@ -672,6 +806,7 @@ function ShelfItem({ item, width, height }) {
       {showGumballGame && (
         <GumballGame onClose={() => setShowGumballGame(false)} />
       )}
+      {showBookRecs && <BookRecs onClose={() => setShowBookRecs(false)} />}
     </>
   );
 }
