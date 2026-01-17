@@ -1,0 +1,18 @@
+{
+  "likes": [
+    "bell-pepper.png",
+    "corn.png",
+    "dim-sum.png",
+    "hot-chocolate.png",
+    "masala-dosa.png",
+    "strawberry.png"
+  ],
+  "dislikes": [
+    "cherries.png",
+    "maple-syrup.png",
+    "milk-tea.png",
+    "pie.png",
+    "pineapple.png",
+    "take-away.png"
+  ]
+}

@@ -38,6 +38,10 @@ const ITEM_ACTIONS = {
     // signal to ShelfItem to open music/album recommendations popup
     return "openMusicRecs";
   },
+  openFoodGame: () => {
+    // signal to ShelfItem to open the food like/dislike drag-and-drop game
+    return "openFoodGame";
+  },
   // Add more action handlers here as needed for popups, modals, etc.
 };
 
@@ -120,8 +124,9 @@ const ITEMS = [
   {
     id: 14,
     name: "Food",
-    width: 1.5,
+    width: 0.6,
     image: "assets/food/fruit.png",
+    action: { type: "openFoodGame" },
   },
   {
     id: 9,
@@ -609,11 +614,263 @@ function MusicRecs({ onClose }) {
   );
 }
 
+// FoodGame Component: drag-and-drop categorize foods into Like / Dislike
+function FoodGame({ onClose }) {
+  const [answers, setAnswers] = useState({ likes: [], dislikes: [] });
+  const [items, setItems] = useState([]); // filenames
+  const [placements, setPlacements] = useState({}); // filename -> 'likes'|'dislikes'
+  const [shuffled, setShuffled] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await fetch("assets/food/tastes/answers.json");
+        if (!r.ok) {
+          console.warn("FoodGame: answers.json not found");
+          setAnswers({ likes: [], dislikes: [] });
+          setItems([]);
+          return;
+        }
+        const a = await r.json();
+        const like = Array.isArray(a.likes) ? a.likes : [];
+        const dislike = Array.isArray(a.dislikes) ? a.dislikes : [];
+        const union = Array.from(new Set([...like, ...dislike]));
+        setAnswers({ likes: like, dislikes: dislike });
+        setItems(union);
+        // shuffle for presentation
+        const shuffled = union.slice().sort(() => Math.random() - 0.5);
+        setShuffled(shuffled);
+      } catch (err) {
+        console.warn("FoodGame: failed to load answers", err);
+        setAnswers({ likes: [], dislikes: [] });
+        setItems([]);
+      }
+    })();
+  }, []);
+
+  const handleOverlayClick = (e) => {
+    if (
+      e.target.classList.contains("gumball-overlay") ||
+      e.target.classList.contains("book-overlay") ||
+      e.target.classList.contains("food-overlay")
+    ) {
+      onClose();
+    }
+  };
+
+  const onDragStart = (e, filename) => {
+    e.dataTransfer.setData("text/plain", filename);
+  };
+
+  const onDropTo = (e, zone) => {
+    e.preventDefault();
+    const filename = e.dataTransfer.getData("text/plain");
+    if (!filename) return;
+    setPlacements((p) => ({ ...p, [filename]: zone }));
+  };
+
+  const onDragOver = (e) => e.preventDefault();
+
+  const total = items.length;
+  const placedCount = Object.keys(placements).length;
+  const finished = total > 0 && placedCount === total;
+
+  const score = finished
+    ? Object.keys(placements).reduce((s, f) => {
+        const correctZone = answers.likes.includes(f) ? "likes" : "dislikes";
+        return s + (placements[f] === correctZone ? 1 : 0);
+      }, 0)
+    : 0;
+
+  return (
+    <div
+      className="gumball-overlay book-overlay food-overlay"
+      onClick={handleOverlayClick}
+    >
+      <div className="gumball-popup" style={{ maxWidth: 720 }}>
+        <h2 className="gumball-title">Food Sort</h2>
+        <p className="gumball-description">
+          Drag each food image into the category you like or dislike.
+        </p>
+
+        <div
+          style={{
+            display: "flex",
+            gap: 12,
+            alignItems: "flex-start",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <div
+            onDrop={(e) => onDropTo(e, "likes")}
+            onDragOver={onDragOver}
+            style={{
+              minWidth: 160,
+              flex: "1 1 200px",
+              background: "#fffaf0",
+              border: "3px solid #8b7355",
+              borderRadius: 12,
+              padding: 12,
+              textAlign: "center",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+            }}
+          >
+            <div style={{ fontWeight: 700, color: "#5d3d1a", marginBottom: 8 }}>
+              Like
+            </div>
+            <div style={{ minHeight: 80 }}>
+              {Object.keys(placements)
+                .filter((f) => placements[f] === "likes")
+                .map((f) => (
+                  <img
+                    key={f}
+                    src={`assets/food/tastes/${f}`}
+                    alt={f}
+                    style={{
+                      width: 64,
+                      height: 64,
+                      objectFit: "cover",
+                      margin: 6,
+                      borderRadius: 8,
+                    }}
+                  />
+                ))}
+            </div>
+          </div>
+
+          <div
+            onDrop={(e) => onDropTo(e, "dislikes")}
+            onDragOver={onDragOver}
+            style={{
+              minWidth: 160,
+              flex: "1 1 200px",
+              background: "#fffaf0",
+              border: "3px solid #8b7355",
+              borderRadius: 12,
+              padding: 12,
+              textAlign: "center",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+            }}
+          >
+            <div style={{ fontWeight: 700, color: "#5d3d1a", marginBottom: 8 }}>
+              Dislike
+            </div>
+            <div style={{ minHeight: 80 }}>
+              {Object.keys(placements)
+                .filter((f) => placements[f] === "dislikes")
+                .map((f) => (
+                  <img
+                    key={f}
+                    src={`assets/food/tastes/${f}`}
+                    alt={f}
+                    style={{
+                      width: 64,
+                      height: 64,
+                      objectFit: "cover",
+                      margin: 6,
+                      borderRadius: 8,
+                    }}
+                  />
+                ))}
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{ marginTop: 18, display: "flex", justifyContent: "center" }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))",
+              gap: 8,
+              width: "100%",
+              maxWidth: 560,
+            }}
+          >
+            {shuffled.map((f) => {
+              const placed = placements[f];
+              // hide if placed
+              if (placed) return null;
+              return (
+                <div
+                  key={f}
+                  style={{ display: "flex", justifyContent: "center" }}
+                >
+                  <img
+                    draggable
+                    onDragStart={(e) => onDragStart(e, f)}
+                    src={`assets/food/tastes/${f}`}
+                    alt={f}
+                    style={{
+                      width: 80,
+                      height: 80,
+                      objectFit: "cover",
+                      borderRadius: 8,
+                      cursor: "grab",
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {finished && (
+          <div style={{ marginTop: 18 }}>
+            <div style={{ fontWeight: 700, color: "#5d3d1a" }}>
+              Score: {score} / {total}
+            </div>
+            <div
+              style={{
+                marginTop: 8,
+                display: "flex",
+                gap: 8,
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              {Object.keys(placements).map((f) => {
+                const correct = answers.likes.includes(f)
+                  ? "likes"
+                  : "dislikes";
+                const ok = placements[f] === correct;
+                return (
+                  <div key={f} style={{ textAlign: "center", width: 96 }}>
+                    <img
+                      src={`assets/food/tastes/${f}`}
+                      alt={f}
+                      style={{
+                        width: 72,
+                        height: 72,
+                        objectFit: "cover",
+                        borderRadius: 8,
+                        border: ok ? "3px solid #4caf50" : "3px solid #f44336",
+                      }}
+                    />
+                    <div
+                      style={{ fontSize: 12, color: "#5d3d1a", marginTop: 6 }}
+                    >
+                      {ok ? "Correct" : "Wrong"}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ShelfItem Component
 function ShelfItem({ item, width, height }) {
   const [showGumballGame, setShowGumballGame] = useState(false);
   const [showBookRecs, setShowBookRecs] = useState(false);
   const [showMusicRecs, setShowMusicRecs] = useState(false);
+  const [showFoodGame, setShowFoodGame] = useState(false);
   const [faceSrc, setFaceSrc] = useState(null);
   const [facePhase, setFacePhase] = useState(""); // "show" | "hide" | ""
   const containerRef = useRef(null);
@@ -708,6 +965,9 @@ function ShelfItem({ item, width, height }) {
         }
         if (result === "openMusicRecs") {
           setShowMusicRecs(true);
+        }
+        if (result === "openFoodGame") {
+          setShowFoodGame(true);
         }
       }
     }
@@ -827,6 +1087,7 @@ function ShelfItem({ item, width, height }) {
       )}
       {showBookRecs && <BookRecs onClose={() => setShowBookRecs(false)} />}
       {showMusicRecs && <MusicRecs onClose={() => setShowMusicRecs(false)} />}
+      {showFoodGame && <FoodGame onClose={() => setShowFoodGame(false)} />}
     </>
   );
 }
