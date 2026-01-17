@@ -48,11 +48,12 @@ const ITEMS = [
     name: "Me",
     width: 1.0,
     image: "assets/plushie/me.png",
+    verticalAlign: 110,
   },
   {
     id: 1,
     name: "Monstera",
-    width: 1.2,
+    width: 0.8,
     image: "assets/plants/monstera.png",
   },
   {
@@ -65,7 +66,7 @@ const ITEMS = [
   {
     id: 2,
     name: "Golden Pothos",
-    width: 1.0,
+    width: 0.8,
     image: "assets/plants/golden-pothos.png",
   },
   {
@@ -90,7 +91,7 @@ const ITEMS = [
   {
     id: 3,
     name: "Aloe Vera",
-    width: 0.9,
+    width: 0.7,
     image: "assets/plants/aloe-vera.png",
   },
   {
@@ -605,6 +606,13 @@ function ShelfItem({ item, width, height }) {
   const [facePhase, setFacePhase] = useState(""); // "show" | "hide" | ""
   const containerRef = useRef(null);
   const [isLit, setIsLit] = useState(false);
+  // speech bubble state for the "Me" item
+  const SPEECH_OPTIONS = [
+    "try clicking around!",
+    "hellooooo!",
+    "welcome to my shelves!",
+  ];
+  const [speechIndex, setSpeechIndex] = useState(0);
 
   // manage face show/hide lifecycles
   useEffect(() => {
@@ -656,6 +664,12 @@ function ShelfItem({ item, width, height }) {
   };
 
   const handleItemClick = (e) => {
+    // If this is the "Me" item, cycle speech text and stop further handling
+    if (item && (item.id === 0 || item.name === "Me")) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      setSpeechIndex((i) => (i + 1) % SPEECH_OPTIONS.length);
+      return;
+    }
     // If this item has a mirror action, show a face
     if (item.action && item.action.type === "mirror") {
       handleMirrorClick(e);
@@ -700,6 +714,7 @@ function ShelfItem({ item, width, height }) {
           width: `${width}px`,
           height: `${height}px`,
           cursor: item.action ? "pointer" : "default",
+          position: "relative",
           "--vertical-align": `${item.verticalAlign ?? 100}%`,
         }}
         onClick={handleItemClick}
@@ -728,6 +743,57 @@ function ShelfItem({ item, width, height }) {
         ) : (
           <div className="item-placeholder">
             <span className="placeholder-icon">📦</span>
+          </div>
+        )}
+        {/* speech bubble for the Me item: pointer stays anchored, bubble shifted right */}
+        {item && (item.id === 0 || item.name === "Me") && (
+          <div
+            className="me-speech-wrapper"
+            style={{
+              position: "absolute",
+              bottom: `${height + 8}px`,
+              right: `-8px`,
+              zIndex: 2100,
+              pointerEvents: "none",
+            }}
+          >
+            {/* anchored pointer (stays in place) */}
+            <div
+              style={{
+                position: "absolute",
+                right: 14,
+                bottom: -8,
+                width: 0,
+                height: 0,
+                borderLeft: "8px solid transparent",
+                borderRight: "8px solid transparent",
+                borderTop: "8px solid #fff",
+                pointerEvents: "none",
+              }}
+            />
+
+            {/* bubble box shifted right visually; use same font as popups */}
+            <div
+              className="me-speech-box"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSpeechIndex((i) => (i + 1) % SPEECH_OPTIONS.length);
+              }}
+              style={{
+                marginLeft: 36,
+                background: "#fff",
+                color: "#111",
+                padding: "8px 12px",
+                borderRadius: 12,
+                boxShadow: "0 6px 18px rgba(0,0,0,0.18)",
+                fontSize: 13,
+                whiteSpace: "nowrap",
+                fontFamily: '"Fredoka", sans-serif',
+                pointerEvents: "auto",
+              }}
+            >
+              {SPEECH_OPTIONS[speechIndex]}
+            </div>
           </div>
         )}
         {/* mirror face overlay (appears from bottom then disappears) */}
