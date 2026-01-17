@@ -21,195 +21,6 @@ const MIRROR_FACES_PATH = "assets/mirror/faces/";
   }
 })();
 
-// AlbumFan Component: handles loading album manifest and animating albums out from boombox
-function AlbumFan() {
-  const [albums, setAlbums] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [offsets, setOffsets] = useState([]);
-  const [boomRect, setBoomRect] = useState(null);
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    // Try to load a manifest listing album filenames from test path first, then fallback
-    const tryFetch = async () => {
-      try {
-        const r1 = await fetch("test/assets/music/albums/albums.json");
-        if (r1.ok) {
-          const list = await r1.json();
-          setAlbums(list || []);
-          return;
-        }
-      } catch (e) {}
-      try {
-        const r2 = await fetch("assets/music/albums/albums.json");
-        if (r2.ok) {
-          const list = await r2.json();
-          setAlbums(list || []);
-          return;
-        }
-      } catch (e) {}
-      // As a last resort, attempt to infer a few common filenames (graceful fallback)
-      setAlbums([]);
-    };
-    tryFetch();
-  }, []);
-
-  useEffect(() => {
-    let boomboxImg = null;
-
-    function updateRect() {
-      boomboxImg = document.querySelector('img[src$="boombox.png"]');
-      if (!boomboxImg) return;
-      const rect = boomboxImg.getBoundingClientRect();
-      setBoomRect(rect);
-      computeOffsets(rect, albums.length);
-    }
-
-    function handleBoomboxClick(e) {
-      e.stopPropagation();
-      updateRect();
-      setOpen((v) => !v);
-    }
-
-    function handleDocClick(e) {
-      const isBoombox =
-        e.target.closest && e.target.closest('img[src$="boombox.png"]');
-      const insideFan = e.target.closest && e.target.closest(".album-fan");
-      if (!isBoombox && !insideFan) setOpen(false);
-    }
-
-    function handleToggleEvent() {
-      updateRect();
-      setOpen((v) => !v);
-    }
-
-    updateRect();
-    boomboxImg = document.querySelector('img[src$="boombox.png"]');
-    if (boomboxImg) {
-      boomboxImg.style.cursor = "pointer";
-      boomboxImg.addEventListener("click", handleBoomboxClick);
-    }
-    document.addEventListener("toggleAlbumFan", handleToggleEvent);
-    window.addEventListener("resize", updateRect);
-    document.addEventListener("click", handleDocClick);
-
-    return () => {
-      if (boomboxImg)
-        boomboxImg.removeEventListener("click", handleBoomboxClick);
-      document.removeEventListener("toggleAlbumFan", handleToggleEvent);
-      window.removeEventListener("resize", updateRect);
-      document.removeEventListener("click", handleDocClick);
-    };
-  }, [albums.length]);
-
-  function computeOffsets(rect, count) {
-    if (!rect || count === 0) return setOffsets([]);
-    // radius based on viewport and boombox size (halved baseline)
-    const vw = Math.min(window.innerWidth, window.innerHeight);
-    const base = Math.max(100, Math.min(220, Math.floor(vw / 6)));
-    const baseRadius = Math.max(base, rect.width * 1.6) * 0.5;
-
-    // User requested: widen left/right (double) and increase top reach by 1.5
-    const radiusX = baseRadius * 2.0; // horizontal multiplier
-    const radiusY = baseRadius * 1.5; // vertical multiplier
-
-    // Apply additional multiplier on all sides; slightly larger than previous
-    const finalRadiusX = radiusX * 0.75;
-    const finalRadiusY = radiusY * 0.75;
-
-    // Narrow the spread to the top-center cluster (approx 11:00 - 1:00)
-    // angles: from -120deg (-2/3 PI) to -60deg (-1/3 PI)
-    const startAngle = -(2 / 3) * Math.PI; // ~11:00
-    const endAngle = -(1 / 3) * Math.PI; // ~1:00
-
-    // small downward shift to lower the whole cluster slightly
-    const verticalShift = Math.max(12, Math.floor(baseRadius * 0.15));
-
-    let arr;
-    if (count === 1) {
-      const angle = -Math.PI / 2; // center top
-      const dx = Math.cos(angle) * finalRadiusX;
-      const dy = Math.sin(angle) * finalRadiusY + verticalShift;
-      arr = [{ dx, dy, rotate: 0 }];
-    } else {
-      const maxRotate = 12; // degrees, left negative, right positive
-      arr = new Array(count).fill(0).map((_, i) => {
-        const t = i / (count - 1); // normalized 0..1
-        const angle = startAngle + t * (endAngle - startAngle);
-        const dx = Math.cos(angle) * finalRadiusX;
-        const dy = Math.sin(angle) * finalRadiusY + verticalShift;
-        const rotate = (t - 0.5) * (maxRotate * 2);
-        return { dx, dy, rotate };
-      });
-    }
-    setOffsets(arr);
-  }
-
-  if (!albums || albums.length === 0) return null;
-
-  // center point where album items originate
-  const originLeft = boomRect
-    ? boomRect.left + boomRect.width / 2
-    : window.innerWidth / 2;
-  const originTop = boomRect
-    ? boomRect.top + boomRect.height / 2
-    : window.innerHeight / 2;
-  // make album thumbnails smaller
-  const thumbSize = boomRect
-    ? Math.max(36, Math.min(80, Math.floor(boomRect.width * 0.5)))
-    : 48;
-
-  return (
-    <div
-      ref={containerRef}
-      className="album-fan"
-      onClick={(e) => {
-        // If click is on an album item or the boombox image, ignore.
-        if (e.target.closest && e.target.closest(".album-fan-item")) return;
-        if (e.target.closest && e.target.closest('img[src$="boombox.png"]'))
-          return;
-        setOpen(false);
-      }}
-      style={{
-        position: "fixed",
-        left: 0,
-        top: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: open ? "auto" : "none",
-        zIndex: 100000,
-      }}
-    >
-      {albums.map((filename, i) => {
-        const offset = offsets[i] || { dx: 0, dy: 0, rotate: 0 };
-        const initialLeft = originLeft - thumbSize / 2;
-        const initialTop = originTop - thumbSize / 2;
-        const style = {
-          position: "absolute",
-          width: `${thumbSize}px`,
-          height: `${thumbSize}px`,
-          left: `${initialLeft}px`,
-          top: `${initialTop}px`,
-          transform: open
-            ? `translate(${offset.dx}px, ${offset.dy}px) rotate(${offset.rotate}deg) scale(1)`
-            : "translate(0,0) scale(0.9)",
-          opacity: open ? 1 : 0,
-        };
-
-        return (
-          <img
-            key={filename}
-            src={`assets/music/albums/${filename}`}
-            alt={`album-${i}`}
-            className="album-fan-item"
-            style={style}
-            onClick={(e) => e.stopPropagation()}
-          />
-        );
-      })}
-    </div>
-  );
-}
 
 // Action handlers for shelf items
 const ITEM_ACTIONS = {
@@ -223,11 +34,6 @@ const ITEM_ACTIONS = {
   openBookRecs: () => {
     // signal to ShelfItem to open book recommendations popup
     return "openBookRecs";
-  },
-  toggleAlbums: () => {
-    // dispatch a custom event the AlbumFan listens for
-    const ev = new CustomEvent("toggleAlbumFan");
-    document.dispatchEvent(ev);
   },
   // Add more action handlers here as needed for popups, modals, etc.
 };
@@ -283,7 +89,6 @@ const ITEMS = [
     name: "music",
     width: 0.6,
     image: "assets/music/boombox.png",
-    action: { type: "toggleAlbums" },
   },
   {
     id: 8,
@@ -551,7 +356,7 @@ function BookRecs({ onClose }) {
         if (!r.ok) {
           console.warn(
             "BookRecs: recommendations manifest not found:",
-            manifestPath
+            manifestPath,
           );
           setList([]);
           return;
@@ -851,11 +656,11 @@ function DynamicShelves() {
         // Get items for this shelf config and calculate their width units
         const shelfItems = ITEMS.slice(
           startingItemIndex,
-          startingItemIndex + itemsPerShelf
+          startingItemIndex + itemsPerShelf,
         );
         const shelfWidthUnits = shelfItems.reduce(
           (sum, item) => sum + item.width,
-          0
+          0,
         );
 
         // Calculate the size items would be with this configuration
@@ -878,17 +683,17 @@ function DynamicShelves() {
       if (!bestLayout) {
         const shelfItems = ITEMS.slice(
           startingItemIndex,
-          startingItemIndex + 1
+          startingItemIndex + 1,
         );
         const shelfWidthUnits = shelfItems.reduce(
           (sum, item) => sum + item.width,
-          0
+          0,
         );
         bestLayout = Math.max(
           1,
           Math.floor(
-            containerWidth / (MIN_ITEM_SIZE * shelfWidthUnits + ITEM_GAP)
-          )
+            containerWidth / (MIN_ITEM_SIZE * shelfWidthUnits + ITEM_GAP),
+          ),
         );
         bestSize = MIN_ITEM_SIZE;
       }
@@ -898,7 +703,7 @@ function DynamicShelves() {
       // for (let i = 0; i < totalItems; i += bestLayout) {
       const shelfItems = ITEMS.slice(
         startingItemIndex,
-        startingItemIndex + bestLayout
+        startingItemIndex + bestLayout,
       );
       const shelfWidthUnits = shelfItems.reduce((sum, it) => sum + it.width, 0);
       const availableWidth =
@@ -906,7 +711,7 @@ function DynamicShelves() {
       // Constrain to MIN/MAX and keep as float for precise layout
       const shelfSize = Math.max(
         MIN_ITEM_SIZE,
-        Math.min(MAX_ITEM_SIZE, availableWidth / shelfWidthUnits)
+        Math.min(MAX_ITEM_SIZE, availableWidth / shelfWidthUnits),
       );
       newShelves.push(shelfItems);
       newShelfSizes.push(shelfSize);
@@ -947,7 +752,6 @@ function DynamicShelves() {
   return (
     <div className="app-container">
       <div className="content-wrapper">
-        <AlbumFan />
         <div className="shelves-container" ref={containerRef}>
           {shelves.map((shelfItems, shelfIndex) => (
             <div key={shelfIndex} className="shelf">
