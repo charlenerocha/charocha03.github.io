@@ -72,7 +72,7 @@ const ITEMS = [
   {
     id: 4,
     name: "Map",
-    width: 2,
+    width: 1.2,
     image: "assets/random/map.jpg",
     verticalAlign: 20,
   },
@@ -118,6 +118,12 @@ const ITEMS = [
     action: { type: "openBookRecs" },
   },
   {
+    id: 14,
+    name: "Food",
+    width: 1.5,
+    image: "assets/food/fruit.png",
+  },
+  {
     id: 9,
     name: "instagram",
     width: 0.4,
@@ -156,6 +162,12 @@ const ITEMS = [
     width: 0.7,
     image: "assets/lighting/lamp3.png",
     action: { type: "toggleLamp" },
+  },
+  {
+    id: 5,
+    name: "Piggy",
+    width: 0.6,
+    image: "assets/piggy/piggy-bank (2).png",
   },
 ];
 
@@ -752,7 +764,7 @@ function ShelfItem({ item, width, height }) {
             style={{
               position: "absolute",
               bottom: `${height + 8}px`,
-              right: `-8px`,
+              left: `2px`,
               zIndex: 2100,
               pointerEvents: "none",
             }}
@@ -761,7 +773,7 @@ function ShelfItem({ item, width, height }) {
             <div
               style={{
                 position: "absolute",
-                right: 14,
+                left: 24,
                 bottom: -8,
                 width: 0,
                 height: 0,
@@ -780,7 +792,7 @@ function ShelfItem({ item, width, height }) {
                 setSpeechIndex((i) => (i + 1) % SPEECH_OPTIONS.length);
               }}
               style={{
-                marginLeft: 36,
+                marginRight: 36,
                 background: "#fff",
                 color: "#111",
                 padding: "8px 12px",
