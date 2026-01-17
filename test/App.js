@@ -21,7 +21,6 @@ const MIRROR_FACES_PATH = "assets/mirror/faces/";
   }
 })();
 
-
 // Action handlers for shelf items
 const ITEM_ACTIONS = {
   openLink: (url) => {
@@ -35,11 +34,21 @@ const ITEM_ACTIONS = {
     // signal to ShelfItem to open book recommendations popup
     return "openBookRecs";
   },
+  openMusicRecs: () => {
+    // signal to ShelfItem to open music/album recommendations popup
+    return "openMusicRecs";
+  },
   // Add more action handlers here as needed for popups, modals, etc.
 };
 
 // Sample items data with varying widths (width is a multiplier of base size)
 const ITEMS = [
+  {
+    id: 0,
+    name: "Me",
+    width: 1.0,
+    image: "assets/plushie/me.png",
+  },
   {
     id: 1,
     name: "Monstera",
@@ -89,6 +98,7 @@ const ITEMS = [
     name: "music",
     width: 0.6,
     image: "assets/music/boombox.png",
+    action: { type: "openMusicRecs" },
   },
   {
     id: 8,
@@ -464,10 +474,133 @@ function BookRecs({ onClose }) {
   );
 }
 
+// MusicRecs Component: same UI as BookRecs but for albums
+function MusicRecs({ onClose }) {
+  const [state, setState] = useState("initial"); // 'initial' | 'thinking' | 'result'
+  const [selected, setSelected] = useState(null);
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    const manifestPath = "assets/music/albums/recommendations.json";
+
+    (async () => {
+      try {
+        const r = await fetch(manifestPath);
+        if (!r.ok) {
+          console.warn(
+            "MusicRecs: recommendations manifest not found:",
+            manifestPath,
+          );
+          setList([]);
+          return;
+        }
+        const arr = await r.json();
+        if (!arr || !arr.length) {
+          setList([]);
+          return;
+        }
+        const normalized = arr
+          .map((item) => {
+            if (typeof item === "string") {
+              return { src: `assets/music/albums/${item}`, note: "" };
+            }
+            if (item && typeof item === "object") {
+              const file = item.file || item.filename || item.name || item.src;
+              console.log("MusicRecs: loaded item", file);
+              return {
+                src: file ? `assets/music/albums/${file}` : null,
+                note: item.note || item.description || item.artist || "",
+              };
+            }
+            return null;
+          })
+          .filter(Boolean);
+        setList(normalized);
+      } catch (err) {
+        console.warn("MusicRecs: failed loading manifest", err);
+        setList([]);
+      }
+    })();
+  }, []);
+
+  const handleGet = () => {
+    setState("thinking");
+    setTimeout(() => {
+      if (!list || list.length === 0) {
+        setSelected(null);
+        setState("result");
+        return;
+      }
+      const pick = list[Math.floor(Math.random() * list.length)];
+      setSelected(pick);
+      setState("result");
+    }, 800);
+  };
+
+  const handleOverlayClick = (e) => {
+    if (
+      e.target.classList.contains("gumball-overlay") ||
+      e.target.classList.contains("book-overlay") ||
+      e.target.classList.contains("music-overlay")
+    ) {
+      onClose();
+    }
+  };
+
+  return (
+    <div
+      className="gumball-overlay book-overlay music-overlay"
+      onClick={handleOverlayClick}
+    >
+      <div className="gumball-popup">
+        {state === "initial" && (
+          <>
+            <p className="gumball-description">
+              Click to get an album recommendation!
+            </p>
+            <button className="gumball-button" onClick={handleGet}>
+              Recommend an album
+            </button>
+          </>
+        )}
+
+        {state === "thinking" && (
+          <div className="gumball-thinking">
+            <div className="thinking-spinner"></div>
+            <p className="thinking-text">Picking a recommendation...</p>
+          </div>
+        )}
+
+        {state === "result" && (
+          <>
+            <div className="gumball-result">
+              {selected ? (
+                <div style={{ textAlign: "center" }}>
+                  <img
+                    src={selected.src}
+                    alt="recommendation"
+                    className="gumball-sticker"
+                  />
+                  <p className="book-note" style={{ marginTop: 12 }}>
+                    {selected.note}
+                  </p>
+                </div>
+              ) : (
+                <div style={{ padding: 16 }}>No recommendations available.</div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ShelfItem Component
 function ShelfItem({ item, width, height }) {
   const [showGumballGame, setShowGumballGame] = useState(false);
   const [showBookRecs, setShowBookRecs] = useState(false);
+  const [showMusicRecs, setShowMusicRecs] = useState(false);
   const [faceSrc, setFaceSrc] = useState(null);
   const [facePhase, setFacePhase] = useState(""); // "show" | "hide" | ""
   const containerRef = useRef(null);
@@ -547,6 +680,9 @@ function ShelfItem({ item, width, height }) {
         if (result === "openBookRecs") {
           setShowBookRecs(true);
         }
+        if (result === "openMusicRecs") {
+          setShowMusicRecs(true);
+        }
       }
     }
   };
@@ -612,6 +748,7 @@ function ShelfItem({ item, width, height }) {
         <GumballGame onClose={() => setShowGumballGame(false)} />
       )}
       {showBookRecs && <BookRecs onClose={() => setShowBookRecs(false)} />}
+      {showMusicRecs && <MusicRecs onClose={() => setShowMusicRecs(false)} />}
     </>
   );
 }
