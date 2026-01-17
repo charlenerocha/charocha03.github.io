@@ -52,7 +52,7 @@ const ITEMS = [
     name: "Me",
     width: 1.0,
     image: "assets/plushie/me.png",
-    verticalAlign: 110,
+    verticalAlign: 115,
   },
   {
     id: 1,
