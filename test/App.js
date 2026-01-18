@@ -688,9 +688,9 @@ function FoodGame({ onClose }) {
       onClick={handleOverlayClick}
     >
       <div className="gumball-popup" style={{ maxWidth: 720 }}>
-        <h2 className="gumball-title">Food Sort</h2>
+        <h2 className="gumball-title">Food sorting!</h2>
         <p className="gumball-description">
-          Drag each food image into the category you like or dislike.
+          I'm quite the picky eater so try sorting my food hot takes!
         </p>
 
         <div
