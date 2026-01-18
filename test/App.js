@@ -321,7 +321,7 @@ function GumballGame({ onClose }) {
         STICKERS[Math.floor(Math.random() * STICKERS.length)];
       setSelectedSticker(randomSticker);
       setGameState("result");
-    }, 2000);
+    }, 1000);
   };
 
   const handleOverlayClick = (e) => {
