@@ -850,7 +850,7 @@ function FoodGame({ onClose }) {
             <div style={{ fontWeight: 700, color: "#5d3d1a", marginBottom: 8 }}>
               Like
             </div>
-            <div style={{ minHeight: 80 }}>
+            <div style={{ minHeight: 50 }}>
               {Object.keys(placements)
                 .filter((f) => placements[f] === "likes")
                 .map((f) => (
@@ -859,8 +859,8 @@ function FoodGame({ onClose }) {
                     src={`assets/food/tastes/${f}`}
                     alt={f}
                     style={{
-                      width: 64,
-                      height: 64,
+                      width: 60,
+                      height: 60,
                       objectFit: "cover",
                       margin: 6,
                       borderRadius: 8,
@@ -888,7 +888,7 @@ function FoodGame({ onClose }) {
             <div style={{ fontWeight: 700, color: "#5d3d1a", marginBottom: 8 }}>
               Dislike
             </div>
-            <div style={{ minHeight: 80 }}>
+            <div style={{ minHeight: 50 }}>
               {Object.keys(placements)
                 .filter((f) => placements[f] === "dislikes")
                 .map((f) => (
@@ -897,8 +897,8 @@ function FoodGame({ onClose }) {
                     src={`assets/food/tastes/${f}`}
                     alt={f}
                     style={{
-                      width: 64,
-                      height: 64,
+                      width: 60,
+                      height: 60,
                       objectFit: "cover",
                       margin: 6,
                       borderRadius: 8,
@@ -941,8 +941,8 @@ function FoodGame({ onClose }) {
                     src={`assets/food/tastes/${f}`}
                     alt={f}
                     style={{
-                      width: 80,
-                      height: 80,
+                      width: 60,
+                      height: 60,
                       objectFit: "cover",
                       borderRadius: 8,
                       cursor: "grab",
