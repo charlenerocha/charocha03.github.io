@@ -99,7 +99,7 @@ const ITEMS = [
   {
     id: 14,
     name: "Food",
-    width: 0.55,
+    width: 0.45,
     image: "assets/food/fruit.png",
     action: { type: "openFoodGame" },
   },
