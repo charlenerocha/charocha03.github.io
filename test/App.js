@@ -8,9 +8,10 @@ const MIRROR_FACES_PATH = "assets/mirror/faces/";
     if (document.getElementById("mirror-face-styles")) return;
     const css = `
       .mirror-face-container{position:absolute;left:50%;transform:translateX(-50%);bottom:0;pointer-events:none;z-index:2000;}
-      .mirror-face{width:56px;max-width:120px;border-radius:8px;opacity:0;transform:translateY(40px) scale(0.98);transition:transform 360ms cubic-bezier(.2,.9,.2,1),opacity 360ms ease;}
+      /* smaller faces and a tighter entrance so they sit higher visually */
+      .mirror-face{width:40px;max-width:88px;border-radius:8px;opacity:0;transform:translateY(28px) scale(0.86);transition:transform 360ms cubic-bezier(.2,.9,.2,1),opacity 320ms ease;}
       .mirror-face.show{opacity:1;transform:translateY(0) scale(1);}
-      .mirror-face.hide{opacity:0;transform:translateY(-12px) scale(0.96);transition:transform 360ms ease,opacity 260ms ease;}
+      .mirror-face.hide{opacity:0;transform:translateY(-8px) scale(0.84);transition:transform 320ms ease,opacity 240ms ease;}
     `;
     const s = document.createElement("style");
     s.id = "mirror-face-styles";
@@ -66,20 +67,21 @@ const ITEMS = [
   {
     id: 1,
     name: "Monstera",
-    width: 0.75,
+    width: 0.8,
     image: "assets/plants/monstera.png",
   },
   {
     id: 2,
     name: "Mirror",
-    width: 1.0,
+    width: 0.7,
     image: "assets/mirror/frame.png",
     action: { type: "mirror" },
+    verticalAlign: 80,
   },
   {
     id: 8,
     name: "Gumball",
-    width: 0.7,
+    width: 0.6,
     image: "assets/gumball/gumball.png",
     action: {
       type: "openGumballGame",
@@ -1234,7 +1236,7 @@ function ShelfItem({ item, width, height }) {
         {faceSrc && (
           <div
             className="mirror-face-container"
-            style={{ bottom: `${Math.max(6, Math.round(height * 0.15))}px` }}
+            style={{ bottom: `${Math.max(6, Math.round(height * 0.295))}px` }}
           >
             <img
               src={faceSrc}
