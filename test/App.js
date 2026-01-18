@@ -621,6 +621,12 @@ function FoodGame({ onClose }) {
   const [placements, setPlacements] = useState({}); // filename -> 'likes'|'dislikes'
   const [shuffled, setShuffled] = useState([]);
 
+  // Refs for drop zones and drag state for mobile-friendly dragging
+  const likesZoneRef = useRef(null);
+  const dislikesZoneRef = useRef(null);
+  const dragStateRef = useRef({});
+  const [dragPreview, setDragPreview] = useState(null); // { file, x, y }
+
   useEffect(() => {
     (async () => {
       try {
@@ -658,8 +664,13 @@ function FoodGame({ onClose }) {
     }
   };
 
+  // Keep HTML5 drag/drop as a fallback for desktop
   const onDragStart = (e, filename) => {
-    e.dataTransfer.setData("text/plain", filename);
+    try {
+      e.dataTransfer.setData("text/plain", filename);
+    } catch (err) {
+      // ignore
+    }
   };
 
   const onDropTo = (e, zone) => {
@@ -670,6 +681,115 @@ function FoodGame({ onClose }) {
   };
 
   const onDragOver = (e) => e.preventDefault();
+
+  // Pointer/touch drag for mobile
+  const startPointerDrag = (ev, filename) => {
+    // get initial coords
+    const clientX =
+      ev.clientX !== undefined
+        ? ev.clientX
+        : (ev.touches && ev.touches[0] && ev.touches[0].clientX) || 0;
+    const clientY =
+      ev.clientY !== undefined
+        ? ev.clientY
+        : (ev.touches && ev.touches[0] && ev.touches[0].clientY) || 0;
+    dragStateRef.current = {
+      file: filename,
+      startX: clientX,
+      startY: clientY,
+      dragging: false,
+    };
+
+    const move = (e) => {
+      const cx =
+        e.clientX !== undefined
+          ? e.clientX
+          : (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
+      const cy =
+        e.clientY !== undefined
+          ? e.clientY
+          : (e.touches && e.touches[0] && e.touches[0].clientY) || 0;
+      const st = dragStateRef.current;
+      if (!st) return;
+      const dx = Math.abs(cx - st.startX);
+      const dy = Math.abs(cy - st.startY);
+      // small threshold to avoid treating taps as drags
+      if (!st.dragging && Math.sqrt(dx * dx + dy * dy) > 12) {
+        st.dragging = true;
+        setDragPreview({ file: filename, x: cx, y: cy });
+      }
+      if (st.dragging) {
+        setDragPreview({ file: filename, x: cx, y: cy });
+        e.preventDefault && e.preventDefault();
+      }
+    };
+
+    const up = (e) => {
+      const st = dragStateRef.current;
+      if (!st) return cleanup();
+      const cx =
+        e.clientX !== undefined
+          ? e.clientX
+          : (e.changedTouches &&
+              e.changedTouches[0] &&
+              e.changedTouches[0].clientX) ||
+            0;
+      const cy =
+        e.clientY !== undefined
+          ? e.clientY
+          : (e.changedTouches &&
+              e.changedTouches[0] &&
+              e.changedTouches[0].clientY) ||
+            0;
+      if (st.dragging) {
+        const likesRect =
+          likesZoneRef.current && likesZoneRef.current.getBoundingClientRect();
+        const dislikesRect =
+          dislikesZoneRef.current &&
+          dislikesZoneRef.current.getBoundingClientRect();
+        let zone = null;
+        if (
+          likesRect &&
+          cx >= likesRect.left &&
+          cx <= likesRect.right &&
+          cy >= likesRect.top &&
+          cy <= likesRect.bottom
+        ) {
+          zone = "likes";
+        } else if (
+          dislikesRect &&
+          cx >= dislikesRect.left &&
+          cx <= dislikesRect.right &&
+          cy >= dislikesRect.top &&
+          cy <= dislikesRect.bottom
+        ) {
+          zone = "dislikes";
+        }
+        if (zone) {
+          setPlacements((p) => ({ ...p, [filename]: zone }));
+        }
+      }
+      cleanup();
+    };
+
+    const cleanup = () => {
+      setDragPreview(null);
+      dragStateRef.current = {};
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("touchmove", move, { passive: false });
+      window.removeEventListener("touchend", up);
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseup", up);
+    };
+
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("touchmove", move, { passive: false });
+    window.addEventListener("touchend", up);
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", up);
+  };
 
   const total = items.length;
   const placedCount = Object.keys(placements).length;
@@ -703,6 +823,7 @@ function FoodGame({ onClose }) {
           }}
         >
           <div
+            ref={likesZoneRef}
             onDrop={(e) => onDropTo(e, "likes")}
             onDragOver={onDragOver}
             style={{
@@ -740,6 +861,7 @@ function FoodGame({ onClose }) {
           </div>
 
           <div
+            ref={dislikesZoneRef}
             onDrop={(e) => onDropTo(e, "dislikes")}
             onDragOver={onDragOver}
             style={{
@@ -799,6 +921,11 @@ function FoodGame({ onClose }) {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <img
+                    // pointer/touch handlers for better mobile drag
+                    onPointerDown={(e) => startPointerDrag(e, f)}
+                    onTouchStart={(e) => startPointerDrag(e, f)}
+                    onMouseDown={(e) => startPointerDrag(e, f)}
+                    // keep desktop DnD fallback
                     draggable
                     onDragStart={(e) => onDragStart(e, f)}
                     src={`assets/food/tastes/${f}`}
@@ -809,6 +936,7 @@ function FoodGame({ onClose }) {
                       objectFit: "cover",
                       borderRadius: 8,
                       cursor: "grab",
+                      touchAction: "none",
                     }}
                   />
                 </div>
@@ -816,6 +944,32 @@ function FoodGame({ onClose }) {
             })}
           </div>
         </div>
+
+        {/* floating drag preview for touch/pointer drags */}
+        {dragPreview && (
+          <div
+            style={{
+              position: "fixed",
+              left: dragPreview.x - 40,
+              top: dragPreview.y - 40,
+              width: 80,
+              height: 80,
+              pointerEvents: "none",
+              zIndex: 3000,
+            }}
+          >
+            <img
+              src={`assets/food/tastes/${dragPreview.file}`}
+              alt={dragPreview.file}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: 8,
+              }}
+            />
+          </div>
+        )}
 
         {finished && (
           <div style={{ marginTop: 18 }}>
