@@ -1001,23 +1001,23 @@ function FoodGame({ onClose }) {
                   : "dislikes";
                 const ok = placements[f] === correct;
                 return (
-                  <div key={f} style={{ textAlign: "center", width: 96 }}>
+                  <div key={f} style={{ textAlign: "center", width: 40 }}>
                     <img
                       src={`assets/food/tastes/${f}`}
                       alt={f}
                       style={{
-                        width: 72,
-                        height: 72,
+                        width: 40,
+                        height: 40,
                         objectFit: "cover",
                         borderRadius: 8,
                         border: ok ? "3px solid #4caf50" : "3px solid #f44336",
                       }}
                     />
-                    <div
+                    {/* <div
                       style={{ fontSize: 12, color: "#5d3d1a", marginTop: 6 }}
                     >
                       {ok ? "Correct" : "Wrong"}
-                    </div>
+                    </div> */}
                   </div>
                 );
               })}
