@@ -45,27 +45,59 @@ const ITEM_ACTIONS = {
   // Add more action handlers here as needed for popups, modals, etc.
 };
 
+// Me, plant, mirror, lamp
+
+// map, books, plant, boombox
+
+// plant, food, gumball, piggy bank
+
+// footer - social media links
+
 // Sample items data with varying widths (width is a multiplier of base size)
 const ITEMS = [
+  // first row
   {
     id: 0,
     name: "Me",
-    width: 1.0,
+    width: 0.8,
     image: "assets/plushie/me.png",
     verticalAlign: 115,
   },
   {
     id: 1,
     name: "Monstera",
-    width: 0.8,
+    width: 0.7,
     image: "assets/plants/monstera.png",
   },
   {
     id: 2,
-    name: "Pictures",
+    name: "Mirror",
     width: 1.0,
     image: "assets/mirror/frame.png",
     action: { type: "mirror" },
+  },
+  {
+    id: 7,
+    name: "Lamp",
+    width: 0.7,
+    image: "assets/lighting/lamp3.png",
+    action: { type: "toggleLamp" },
+  },
+
+  // second row
+  {
+    id: 4,
+    name: "Map",
+    width: 1.2,
+    image: "assets/random/map.jpg",
+    verticalAlign: 20,
+  },
+  {
+    id: 13,
+    name: "Books",
+    width: 1.5,
+    image: "assets/books/books (1).png",
+    action: { type: "openBookRecs" },
   },
   {
     id: 2,
@@ -74,24 +106,14 @@ const ITEMS = [
     image: "assets/plants/golden-pothos.png",
   },
   {
-    id: 4,
-    name: "Map",
-    width: 1.2,
-    image: "assets/random/map.jpg",
-    verticalAlign: 20,
+    id: 12,
+    name: "Boombox",
+    width: 0.6,
+    image: "assets/music/boombox.png",
+    action: { type: "openMusicRecs" },
   },
-  // {
-  //   id: 5,
-  //   name: "Succulent",
-  //   width: 0.8,
-  //   image: "assets/plants/succulent.png",
-  // },
-  // {
-  //   id: 6,
-  //   name: "Lcd Monitor",
-  //   width: 2.0,
-  //   image: "assets/random/lcd.png",
-  // },
+
+  // third row
   {
     id: 3,
     name: "Aloe Vera",
@@ -99,11 +121,11 @@ const ITEMS = [
     image: "assets/plants/aloe-vera.png",
   },
   {
-    id: 12,
-    name: "music",
+    id: 14,
+    name: "Food",
     width: 0.6,
-    image: "assets/music/boombox.png",
-    action: { type: "openMusicRecs" },
+    image: "assets/food/fruit.png",
+    action: { type: "openFoodGame" },
   },
   {
     id: 8,
@@ -115,65 +137,51 @@ const ITEMS = [
     },
   },
   {
-    id: 13,
-    name: "Books",
-    width: 1.5,
-    image: "assets/books/books (1).png",
-    action: { type: "openBookRecs" },
-  },
-  {
-    id: 14,
-    name: "Food",
-    width: 0.6,
-    image: "assets/food/fruit.png",
-    action: { type: "openFoodGame" },
-  },
-  {
-    id: 9,
-    name: "instagram",
-    width: 0.4,
-    image: "assets/social/instagram.png",
-    verticalAlign: 30,
-    action: {
-      type: "openLink",
-      url: "https://www.instagram.com/charlenerocha_/",
-    },
-  },
-  {
-    id: 10,
-    name: "linkedin",
-    width: 0.4,
-    image: "assets/social/linkedin.png",
-    verticalAlign: 50,
-    action: {
-      type: "openLink",
-      url: "https://www.linkedin.com/in/charlenerochaa/",
-    },
-  },
-  {
-    id: 11,
-    name: "website",
-    width: 0.4,
-    image: "assets/social/internet.png",
-    action: {
-      type: "openLink",
-      url: "https://www.charlenerocha.com",
-    },
-    verticalAlign: 30,
-  },
-  {
-    id: 7,
-    name: "Lamp",
-    width: 0.7,
-    image: "assets/lighting/lamp3.png",
-    action: { type: "toggleLamp" },
-  },
-  {
     id: 5,
     name: "Piggy",
     width: 0.6,
     image: "assets/piggy/piggy-bank (2).png",
   },
+
+  // {
+  //   id: 5,
+  //   name: "Succulent",
+  //   width: 0.6,
+  //   image: "assets/plants/succulent.png",
+  // },
+  // {
+  //   id: 9,
+  //   name: "instagram",
+  //   width: 0.4,
+  //   image: "assets/social/instagram.png",
+  //   verticalAlign: 30,
+  //   action: {
+  //     type: "openLink",
+  //     url: "https://www.instagram.com/charlenerocha_/",
+  //   },
+  // },
+  // {
+  //   id: 10,
+  //   name: "linkedin",
+  //   width: 0.4,
+  //   image: "assets/social/linkedin.png",
+  //   verticalAlign: 50,
+  //   action: {
+  //     type: "openLink",
+  //     url: "https://www.linkedin.com/in/charlenerochaa/",
+  //   },
+  // },
+  // {
+  //   id: 11,
+  //   name: "website",
+  //   width: 0.4,
+  //   image: "assets/social/internet.png",
+  //   action: {
+  //     type: "openLink",
+  //     url: "https://www.charlenerocha.com",
+  //   },
+  //   verticalAlign: 30,
+  // },
 ];
 
 // MapWithPins Component
@@ -1177,7 +1185,7 @@ function ShelfItem({ item, width, height }) {
             className="me-speech-wrapper"
             style={{
               position: "absolute",
-              bottom: `${height + 8}px`,
+              bottom: `${height - 10}px`,
               left: `2px`,
               zIndex: 2100,
               pointerEvents: "none",
@@ -1193,7 +1201,7 @@ function ShelfItem({ item, width, height }) {
                 height: 0,
                 borderLeft: "8px solid transparent",
                 borderRight: "8px solid transparent",
-                borderTop: "8px solid #fff",
+                borderTop: "8px solid #fff3d6",
                 pointerEvents: "none",
               }}
             />
@@ -1207,7 +1215,7 @@ function ShelfItem({ item, width, height }) {
               }}
               style={{
                 marginRight: 36,
-                background: "#fff",
+                background: "#fff3d6",
                 color: "#111",
                 padding: "8px 12px",
                 borderRadius: 12,
