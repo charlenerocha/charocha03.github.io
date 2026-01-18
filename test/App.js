@@ -66,7 +66,7 @@ const ITEMS = [
   {
     id: 1,
     name: "Monstera",
-    width: 0.7,
+    width: 0.75,
     image: "assets/plants/monstera.png",
   },
   {
@@ -77,11 +77,13 @@ const ITEMS = [
     action: { type: "mirror" },
   },
   {
-    id: 7,
-    name: "Lamp",
+    id: 8,
+    name: "Gumball",
     width: 0.7,
-    image: "assets/lighting/lamp3.png",
-    action: { type: "toggleLamp" },
+    image: "assets/gumball/gumball.png",
+    action: {
+      type: "openGumballGame",
+    },
   },
 
   // second row
@@ -93,16 +95,16 @@ const ITEMS = [
     verticalAlign: 20,
   },
   {
-    id: 13,
-    name: "Books",
-    width: 1.5,
-    image: "assets/books/books (1).png",
-    action: { type: "openBookRecs" },
+    id: 14,
+    name: "Food",
+    width: 0.55,
+    image: "assets/food/fruit.png",
+    action: { type: "openFoodGame" },
   },
   {
     id: 2,
     name: "Golden Pothos",
-    width: 0.8,
+    width: 0.7,
     image: "assets/plants/golden-pothos.png",
   },
   {
@@ -121,25 +123,23 @@ const ITEMS = [
     image: "assets/plants/aloe-vera.png",
   },
   {
-    id: 14,
-    name: "Food",
-    width: 0.6,
-    image: "assets/food/fruit.png",
-    action: { type: "openFoodGame" },
+    id: 13,
+    name: "Books",
+    width: 0.9,
+    image: "assets/books/books (1).png",
+    action: { type: "openBookRecs" },
   },
   {
-    id: 8,
-    name: "Gumball",
-    width: 0.8,
-    image: "assets/gumball/gumball.png",
-    action: {
-      type: "openGumballGame",
-    },
+    id: 7,
+    name: "Lamp",
+    width: 0.6,
+    image: "assets/lighting/lamp3.png",
+    action: { type: "toggleLamp" },
   },
   {
     id: 5,
     name: "Piggy",
-    width: 0.6,
+    width: 0.5,
     image: "assets/piggy/piggy-bank (2).png",
   },
 

@@ -571,8 +571,8 @@ body {
   display: flex;
   /* allow scrolling when popup is taller than the viewport */
   overflow-y: auto;
-  /* align popups to the top so users can scroll down on small screens */
-  align-items: flex-start;
+  /* center popups by default (both horizontally and vertically) */
+  align-items: center;
   justify-content: center;
   /* provide padding so top content is not cut off on small screens */
   padding: 32px 16px;
@@ -587,6 +587,9 @@ body {
   padding: 40px;
   max-width: 400px;
   width: 90%;
+  /* ensure popup never exceeds viewport height; allow internal scrolling */
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   text-align: center;
   animation: popupSlideIn 0.3s ease-out;
