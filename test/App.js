@@ -1042,6 +1042,7 @@ function ShelfItem({ item, width, height }) {
   const [facePhase, setFacePhase] = useState(""); // "show" | "hide" | ""
   const containerRef = useRef(null);
   const [isLit, setIsLit] = useState(false);
+  const mirrorTransitionRef = useRef(false);
   // speech bubble state for the "Me" item
   const SPEECH_OPTIONS = [
     "try clicking around!",
@@ -1050,26 +1051,11 @@ function ShelfItem({ item, width, height }) {
   ];
   const [speechIndex, setSpeechIndex] = useState(0);
 
-  // manage face show/hide lifecycles
-  useEffect(() => {
-    if (!faceSrc) return;
-    let t1 = setTimeout(() => setFacePhase("show"), 20);
-    // hide after 1.4s
-    let t2 = setTimeout(() => setFacePhase("hide"), 1400);
-    // remove after 1.8s
-    let t3 = setTimeout(() => {
-      setFaceSrc(null);
-      setFacePhase("");
-    }, 1800);
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-    };
-  }, [faceSrc]);
+  // Mirror face lifecycle is now controlled by clicks: show, then persist.
+  // Clicking while a face is visible will hide it, then replace it with a new face.
+  // Use a ref to guard against rapid repeated clicks during the hide/replace transition.
 
-  const handleMirrorClick = async (e) => {
-    if (e && e.stopPropagation) e.stopPropagation();
+  const loadRandomFace = async () => {
     // Only load faces from the test assets directory per project rules
     const tryPaths = [`${MIRROR_FACES_PATH}faces.json`];
     for (const p of tryPaths) {
@@ -1086,9 +1072,8 @@ function ShelfItem({ item, width, height }) {
         }
         const name = list[Math.floor(Math.random() * list.length)];
         const base = p.replace(/faces.json$/, "");
-        setFaceSrc(base + name);
         console.debug("mirror: using", base + name);
-        return;
+        return base + name;
       } catch (err) {
         console.debug("mirror: fetch failed", p, err);
       }
@@ -1096,7 +1081,41 @@ function ShelfItem({ item, width, height }) {
     // Final fallback to bundled names (works even without JSON)
     const FALLBACK = ["face1.svg", "face2.svg", "face3.svg"];
     const name = FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
-    setFaceSrc(MIRROR_FACES_PATH + name);
+    return MIRROR_FACES_PATH + name;
+  };
+
+  const handleMirrorClick = async (e) => {
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (mirrorTransitionRef.current) return;
+    mirrorTransitionRef.current = true;
+
+    // If no face visible -> load and show (persist)
+    if (!faceSrc) {
+      const src = await loadRandomFace();
+      if (src) {
+        setFaceSrc(src);
+        // trigger CSS show class next tick
+        setTimeout(() => setFacePhase("show"), 20);
+      }
+      mirrorTransitionRef.current = false;
+      return;
+    }
+
+    // If a face is visible -> hide it, then replace with a new one
+    setFacePhase("hide");
+    // Hide animation is ~320ms in CSS; wait a bit extra before replacing
+    setTimeout(async () => {
+      const src = await loadRandomFace();
+      if (src) {
+        setFaceSrc(src);
+        // new face should animate in
+        setTimeout(() => setFacePhase("show"), 20);
+      } else {
+        setFaceSrc(null);
+        setFacePhase("");
+      }
+      mirrorTransitionRef.current = false;
+    }, 380);
   };
 
   const handleItemClick = (e) => {
@@ -1239,7 +1258,7 @@ function ShelfItem({ item, width, height }) {
         {faceSrc && (
           <div
             className="mirror-face-container"
-            style={{ bottom: `${Math.max(6, Math.round(height * 0.295))}px` }}
+            style={{ bottom: `${Math.max(6, Math.round(height * 0.32))}px` }}
           >
             <img
               src={faceSrc}
