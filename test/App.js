@@ -357,7 +357,10 @@ function GumballGame({ onClose }) {
         {gameState === "result" && (
           <>
             <h2 className="gumball-title">Here's Your Candy!</h2>
-            <div className="gumball-result">
+            <div
+              className="gumball-result"
+              onClick={() => setGameState("initial")}
+            >
               <img
                 src={selectedSticker}
                 alt="Your gumball"
@@ -473,7 +476,7 @@ function BookRecs({ onClose }) {
 
         {state === "result" && (
           <>
-            <div className="gumball-result">
+            <div className="gumball-result" onClick={() => setState("initial")}>
               {selected ? (
                 <div style={{ textAlign: "center" }}>
                   <img
@@ -601,7 +604,7 @@ function MusicRecs({ onClose }) {
 
         {state === "result" && (
           <>
-            <div className="gumball-result">
+            <div className="gumball-result" onClick={() => setState("initial")}>
               {selected ? (
                 <div style={{ textAlign: "center" }}>
                   <img
