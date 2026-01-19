@@ -43,6 +43,10 @@ const ITEM_ACTIONS = {
     // signal to ShelfItem to open the food like/dislike drag-and-drop game
     return "openFoodGame";
   },
+  openWordleGame: () => {
+    // signal to ShelfItem to open the Monstera wordle popup
+    return "openWordleGame";
+  },
   // Add more action handlers here as needed for popups, modals, etc.
 };
 
@@ -69,6 +73,7 @@ const ITEMS = [
     name: "Monstera",
     width: 0.8,
     image: "assets/plants/monstera.png",
+    action: { type: "openWordleGame" },
   },
   {
     id: 2,
@@ -374,6 +379,185 @@ function GumballGame({ onClose }) {
               Try Again
             </button> */}
           </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Wordle-style game shown when Monstera is clicked
+function WordleGame({ onClose }) {
+  const WORDS = ["shelf", "hello", "tests"];
+  const [answer, setAnswer] = useState(null);
+  const [guesses, setGuesses] = useState([]);
+  const [current, setCurrent] = useState("");
+  const [status, setStatus] = useState("playing"); // playing | won | lost
+
+  useEffect(() => {
+    startNew();
+  }, []);
+
+  const startNew = () => {
+    const pick = WORDS[Math.floor(Math.random() * WORDS.length)];
+    setAnswer(pick);
+    setGuesses([]);
+    setCurrent("");
+    setStatus("playing");
+  };
+
+  const handleSubmit = (e) => {
+    e && e.preventDefault();
+    if (!current || current.length !== answer.length || status !== "playing")
+      return;
+    const guess = current.toLowerCase();
+    const next = [...guesses, guess];
+    setGuesses(next);
+    setCurrent("");
+    if (guess === answer) {
+      setStatus("won");
+      return;
+    }
+    if (next.length >= 4) {
+      setStatus("lost");
+    }
+  };
+
+  const evalLetter = (ch, i, ans, guess) => {
+    if (guess[i] === ans[i]) return "correct";
+    if (ans.includes(guess[i])) return "present";
+    return "absent";
+  };
+
+  const handleOverlayClick = (e) => {
+    if (
+      e.target.classList.contains("gumball-overlay") ||
+      e.target.classList.contains("wordle-overlay")
+    ) {
+      onClose();
+    }
+  };
+
+  return (
+    <div
+      className="gumball-overlay wordle-overlay"
+      onClick={handleOverlayClick}
+    >
+      <div
+        className="gumball-popup"
+        style={{ maxWidth: 520, fontFamily: '"Fredoka", sans-serif' }}
+      >
+        <h2 className="gumball-title">Wordle</h2>
+        <p className="gumball-description">
+          Guess the {answer ? answer.length : 5}-letter word.
+        </p>
+
+        <div
+          style={{
+            display: "grid",
+            gap: 8,
+            marginBottom: 12,
+            maxWidth: 360,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
+          {Array.from({ length: Math.max(4, guesses.length) }).map((_, idx) => {
+            const guess = guesses[idx] || null;
+            const letters = guess
+              ? guess.split("")
+              : Array.from({ length: answer ? answer.length : 5 }).map(
+                  () => "",
+                );
+            return (
+              <div
+                key={idx}
+                style={{ display: "flex", gap: 6, justifyContent: "center" }}
+              >
+                {letters.map((ch, i) => {
+                  const cls = guess ? evalLetter(ch, i, answer, guess) : "";
+                  const bg =
+                    cls === "correct"
+                      ? "#4caf50"
+                      : cls === "present"
+                        ? "#f4c542"
+                        : cls === "absent"
+                          ? "#ddd"
+                          : "#fff";
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background: bg,
+                        borderRadius: 6,
+                        fontWeight: 700,
+                      }}
+                    >
+                      {ch}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+
+        {status === "playing" && (
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              gap: 8,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <input
+              value={current}
+              onChange={(e) =>
+                setCurrent(e.target.value.slice(0, answer ? answer.length : 5))
+              }
+              placeholder="Type your guess"
+              style={{
+                padding: "5px 10px",
+                fontSize: 16,
+                borderRadius: 6,
+                border: "1px solid #ccc",
+                width: 180,
+                maxWidth: "60%",
+                boxSizing: "border-box",
+              }}
+            />
+            <button className="gumball-button" type="submit">
+              Guess
+            </button>
+          </form>
+        )}
+
+        {status === "won" && (
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>
+              You won!
+            </div>
+            <button className="gumball-button" onClick={startNew}>
+              Play again
+            </button>
+          </div>
+        )}
+
+        {status === "lost" && (
+          <div style={{ textAlign: "center" }}>
+            <div style={{ marginBottom: 8 }}>
+              Out of guesses — the answer was <strong>{answer}</strong>.
+            </div>
+            <button className="gumball-button" onClick={startNew}>
+              Play again
+            </button>
+          </div>
         )}
       </div>
     </div>
@@ -1051,6 +1235,7 @@ function ShelfItem({ item, width, height }) {
   const [showGumballGame, setShowGumballGame] = useState(false);
   const [showBookRecs, setShowBookRecs] = useState(false);
   const [showMusicRecs, setShowMusicRecs] = useState(false);
+  const [showWordleGame, setShowWordleGame] = useState(false);
   const [showFoodGame, setShowFoodGame] = useState(false);
   const [faceSrc, setFaceSrc] = useState(null);
   const [facePhase, setFacePhase] = useState(""); // "show" | "hide" | ""
@@ -1165,6 +1350,9 @@ function ShelfItem({ item, width, height }) {
         }
         if (result === "openMusicRecs") {
           setShowMusicRecs(true);
+        }
+        if (result === "openWordleGame") {
+          setShowWordleGame(true);
         }
         if (result === "openFoodGame") {
           setShowFoodGame(true);
@@ -1287,6 +1475,9 @@ function ShelfItem({ item, width, height }) {
       )}
       {showBookRecs && <BookRecs onClose={() => setShowBookRecs(false)} />}
       {showMusicRecs && <MusicRecs onClose={() => setShowMusicRecs(false)} />}
+      {showWordleGame && (
+        <WordleGame onClose={() => setShowWordleGame(false)} />
+      )}
       {showFoodGame && <FoodGame onClose={() => setShowFoodGame(false)} />}
     </>
   );
