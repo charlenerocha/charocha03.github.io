@@ -643,7 +643,18 @@ function TwoTruthsGame({ onClose }) {
 
 // Wordle-style game shown when Monstera is clicked
 function WordleGame({ onClose }) {
-  const WORDS = ["shelf", "hello", "tests"];
+  const WORDS = [
+    "shelf",
+    "build",
+    "bytes",
+    "story",
+    "light",
+    "plush",
+    "words",
+    "craft",
+    "focus",
+    "plant",
+  ];
   const [answer, setAnswer] = useState(null);
   const [guesses, setGuesses] = useState([]);
   const [current, setCurrent] = useState("");
