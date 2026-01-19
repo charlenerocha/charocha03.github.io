@@ -639,6 +639,7 @@ function FoodGame({ onClose }) {
   const dislikesZoneRef = useRef(null);
   const dragStateRef = useRef({});
   const [dragPreview, setDragPreview] = useState(null); // { file, x, y }
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -665,6 +666,15 @@ function FoodGame({ onClose }) {
         setItems([]);
       }
     })();
+    // detect touch capability once
+    try {
+      const hasTouch =
+        typeof window !== "undefined" &&
+        ("ontouchstart" in window ||
+          navigator.maxTouchPoints > 0 ||
+          navigator.msMaxTouchPoints > 0);
+      setIsTouchDevice(Boolean(hasTouch));
+    } catch (e) {}
   }, []);
 
   const handleOverlayClick = (e) => {
@@ -934,13 +944,17 @@ function FoodGame({ onClose }) {
                   style={{ display: "flex", justifyContent: "center" }}
                 >
                   <img
-                    // pointer/touch handlers for better mobile drag
-                    onPointerDown={(e) => startPointerDrag(e, f)}
-                    onTouchStart={(e) => startPointerDrag(e, f)}
-                    onMouseDown={(e) => startPointerDrag(e, f)}
-                    // keep desktop DnD fallback
-                    draggable
-                    onDragStart={(e) => onDragStart(e, f)}
+                    onPointerDown={
+                      isTouchDevice ? (e) => startPointerDrag(e, f) : undefined
+                    }
+                    onTouchStart={
+                      isTouchDevice ? (e) => startPointerDrag(e, f) : undefined
+                    }
+                    // Use HTML5 DnD on non-touch devices only
+                    draggable={!isTouchDevice}
+                    onDragStart={
+                      !isTouchDevice ? (e) => onDragStart(e, f) : undefined
+                    }
                     src={`assets/food/tastes/${f}`}
                     alt={f}
                     style={{
@@ -985,7 +999,7 @@ function FoodGame({ onClose }) {
         )}
 
         {finished && (
-          <div style={{ marginTop: 18 }}>
+          <div style={{ marginTop: 10 }}>
             <div style={{ fontWeight: 700, color: "#5d3d1a" }}>
               Score: {score} / {total}
             </div>
