@@ -425,15 +425,14 @@ function WordleGame({ onClose }) {
   const [guesses, setGuesses] = useState([]);
   const [current, setCurrent] = useState("");
   const [status, setStatus] = useState("playing"); // playing | won | lost
+  const MAX_GUESSES = 4;
 
   useEffect(() => {
-    try {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = prev;
-      };
-    } catch (e) {}
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, []);
 
   useEffect(() => {
@@ -448,27 +447,59 @@ function WordleGame({ onClose }) {
     setStatus("playing");
   };
 
+  /**
+   * Correct Wordle evaluation:
+   * 1) Mark correct letters first
+   * 2) Then mark present letters using remaining counts
+   */
+  const evaluateGuess = (guess, answer) => {
+    const result = Array(guess.length).fill("absent");
+    const counts = {};
+
+    // Count letters in answer
+    for (const ch of answer) {
+      counts[ch] = (counts[ch] || 0) + 1;
+    }
+
+    // Pass 1: correct (green)
+    for (let i = 0; i < guess.length; i++) {
+      if (guess[i] === answer[i]) {
+        result[i] = "correct";
+        counts[guess[i]]--;
+      }
+    }
+
+    // Pass 2: present (yellow)
+    for (let i = 0; i < guess.length; i++) {
+      const ch = guess[i];
+      if (result[i] === "correct") continue;
+
+      if (counts[ch] > 0) {
+        result[i] = "present";
+        counts[ch]--;
+      }
+    }
+
+    return result;
+  };
+
   const handleSubmit = (e) => {
     e && e.preventDefault();
     if (!current || current.length !== answer.length || status !== "playing")
       return;
+
     const guess = current.toLowerCase();
-    const next = [...guesses, guess];
+    const evaluation = evaluateGuess(guess, answer);
+    const next = [...guesses, { guess, evaluation }];
+
     setGuesses(next);
     setCurrent("");
+
     if (guess === answer) {
       setStatus("won");
-      return;
-    }
-    if (next.length >= 4) {
+    } else if (next.length >= MAX_GUESSES) {
       setStatus("lost");
     }
-  };
-
-  const evalLetter = (ch, i, ans, guess) => {
-    if (guess[i] === ans[i]) return "correct";
-    if (ans.includes(guess[i])) return "present";
-    return "absent";
   };
 
   const handleOverlayClick = (e) => {
@@ -504,20 +535,21 @@ function WordleGame({ onClose }) {
             marginRight: "auto",
           }}
         >
-          {Array.from({ length: Math.max(4, guesses.length) }).map((_, idx) => {
-            const guess = guesses[idx] || null;
-            const letters = guess
-              ? guess.split("")
+          {Array.from({ length: MAX_GUESSES }).map((_, idx) => {
+            const row = guesses[idx] || null;
+            const letters = row
+              ? row.guess.split("")
               : Array.from({ length: answer ? answer.length : 5 }).map(
                   () => "",
                 );
+
             return (
               <div
                 key={idx}
                 style={{ display: "flex", gap: 6, justifyContent: "center" }}
               >
                 {letters.map((ch, i) => {
-                  const cls = guess ? evalLetter(ch, i, answer, guess) : "";
+                  const cls = row ? row.evaluation[i] : "";
                   const bg =
                     cls === "correct"
                       ? "#4caf50"
@@ -526,6 +558,7 @@ function WordleGame({ onClose }) {
                         : cls === "absent"
                           ? "#ddd"
                           : "#fff";
+
                   return (
                     <div
                       key={i}
@@ -538,6 +571,7 @@ function WordleGame({ onClose }) {
                         background: bg,
                         borderRadius: 6,
                         fontWeight: 700,
+                        textTransform: "uppercase",
                       }}
                     >
                       {ch}
@@ -562,7 +596,11 @@ function WordleGame({ onClose }) {
             <input
               value={current}
               onChange={(e) =>
-                setCurrent(e.target.value.slice(0, answer ? answer.length : 5))
+                setCurrent(
+                  e.target.value
+                    .toLowerCase()
+                    .slice(0, answer ? answer.length : 5),
+                )
               }
               placeholder="Type your guess"
               style={{
@@ -572,7 +610,6 @@ function WordleGame({ onClose }) {
                 border: "1px solid #ccc",
                 width: 180,
                 maxWidth: "60%",
-                boxSizing: "border-box",
               }}
             />
             <button className="gumball-button" type="submit">
@@ -583,9 +620,7 @@ function WordleGame({ onClose }) {
 
         {status === "won" && (
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 8 }}>
-              You won!
-            </div>
+            <div style={{ fontSize: 18, marginBottom: 8 }}>You won!</div>
             <button className="gumball-button" onClick={startNew}>
               Play again
             </button>
