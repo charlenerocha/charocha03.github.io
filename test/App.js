@@ -39,6 +39,9 @@ const ITEM_ACTIONS = {
     // signal to ShelfItem to open music/album recommendations popup
     return "openMusicRecs";
   },
+  openTwoTruthsGame: () => {
+    return "openTwoTruths";
+  },
   openFoodGame: () => {
     // signal to ShelfItem to open the food like/dislike drag-and-drop game
     return "openFoodGame";
@@ -113,6 +116,7 @@ const ITEMS = [
     name: "Golden Pothos",
     width: 0.7,
     image: "assets/plants/golden-pothos.png",
+    action: { type: "openTwoTruthsGame" },
   },
   {
     id: 12,
@@ -412,6 +416,225 @@ function GumballGame({ onClose }) {
               Try Again
             </button> */}
           </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// TwoTruthsGame Component: similar UI to GumballGame but presents three statements
+function TwoTruthsGame({ onClose }) {
+  const [state, setState] = useState("initial"); // 'initial' | 'thinking' | 'result'
+  const [selectedSet, setSelectedSet] = useState(null);
+  const [list, setList] = useState([
+    // Each entry: { statements: [s1,s2,s3], lieIndex: 0|1|2 }
+    {
+      statements: [
+        "I've lived in three different countries.",
+        "I can play the ukulele.",
+        "I once climbed Mount Kilimanjaro.",
+      ],
+      lieIndex: 2,
+    },
+    {
+      statements: [
+        "I love spicy food.",
+        "I have a twin sibling.",
+        "I enjoy coding late at night.",
+      ],
+      lieIndex: 1,
+    },
+    {
+      statements: [
+        "I have a pet snake.",
+        "I drink coffee every morning.",
+        "I have visited over 20 countries.",
+      ],
+      lieIndex: 0,
+    },
+  ]);
+  const [prev, setPrev] = useState(null);
+  const [revealed, setRevealed] = useState(null); // { chosenIndex, correct }
+
+  useEffect(() => {
+    try {
+      const prevO = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prevO;
+      };
+    } catch (e) {}
+  }, []);
+
+  const handleGet = () => {
+    setState("thinking");
+    setTimeout(() => {
+      if (!list || list.length === 0) {
+        setSelectedSet(null);
+        setState("result");
+        return;
+      }
+      if (list.length === 1) {
+        setSelectedSet(list[0]);
+        setState("result");
+        return;
+      }
+      // prefer a different set than previous
+      let pick;
+      let attempts = 0;
+      do {
+        pick = list[Math.floor(Math.random() * list.length)];
+        attempts++;
+      } while (prev && pick === prev && attempts < 10);
+      if (prev && pick === prev) {
+        pick = list.find((i) => i !== prev) || pick;
+      }
+      setSelectedSet(pick);
+      setPrev(pick);
+      setRevealed(null);
+      setState("result");
+    }, 800);
+  };
+
+  const handleChoice = (idx) => {
+    if (!selectedSet) return;
+    const correct = idx === selectedSet.lieIndex;
+    setRevealed({ chosenIndex: idx, correct });
+  };
+
+  const handleOverlayClick = (e) => {
+    if (
+      e.target.classList.contains("gumball-overlay") ||
+      e.target.classList.contains("two-truths-overlay")
+    ) {
+      onClose();
+    }
+  };
+
+  return (
+    <div
+      className="gumball-overlay book-overlay two-truths-overlay"
+      onClick={handleOverlayClick}
+    >
+      <div className="gumball-popup">
+        {state === "initial" && (
+          <>
+            <p className="gumball-description">
+              Click to get three statements!
+            </p>
+            <button className="gumball-button" onClick={handleGet}>
+              Get statements
+            </button>
+          </>
+        )}
+
+        {state === "thinking" && (
+          <div className="gumball-thinking">
+            <div className="thinking-spinner"></div>
+            <p className="thinking-text">Preparing statements...</p>
+          </div>
+        )}
+
+        {state === "result" && (
+          <div className="gumball-result">
+            {selectedSet ? (
+              <div style={{ textAlign: "center" }}>
+                <div
+                  style={{
+                    display: "grid",
+                    gap: 10,
+                    width: "100%",
+                    maxWidth: 520,
+                  }}
+                >
+                  {selectedSet.statements.map((s, i) => {
+                    const isChosen = revealed && revealed.chosenIndex === i;
+                    const wasLie = selectedSet.lieIndex === i;
+                    // Statement card styling to match popup look
+                    const cardStyle = {
+                      padding: "12px 14px",
+                      borderRadius: 10,
+                      border: "1px solid #e6e6e6",
+                      background: "#fff",
+                      boxShadow: "0 8px 18px rgba(0,0,0,0.06)",
+                      cursor: revealed ? "default" : "pointer",
+                      textAlign: "left",
+                      fontFamily: '"Fredoka", sans-serif',
+                      fontSize: 15,
+                    };
+                    // Mutate subtle background after reveal to indicate statuses
+                    if (revealed) {
+                      if (isChosen) {
+                        cardStyle.background = revealed.correct
+                          ? "#c3ffc8"
+                          : "#ffaebb";
+                        cardStyle.border = revealed.correct
+                          ? "1px solid #c8e6c9"
+                          : "1px solid #ffcdd2";
+                      } else if (wasLie) {
+                        cardStyle.background = "#fff48f";
+                        cardStyle.border = "1px solid #fff59d";
+                      }
+                    }
+
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => !revealed && handleChoice(i)}
+                        style={cardStyle}
+                        role="button"
+                        aria-pressed={Boolean(isChosen)}
+                      >
+                        {s}
+                      </div>
+                    );
+                  })}
+                </div>
+                {revealed && (
+                  <div style={{ marginTop: 14, textAlign: "center" }}>
+                    <div style={{ fontWeight: 700, marginBottom: 8 }}>
+                      {revealed.correct ? (
+                        <span style={{ color: "#2e7d32" }}>
+                          Correct — you found the lie!
+                        </span>
+                      ) : (
+                        <span style={{ color: "#b71c1c" }}>
+                          Not quite — that was actually true.
+                        </span>
+                      )}
+                    </div>
+                    {/* <div style={{ marginTop: 6 }}>
+                      <div style={{ color: "#444", fontWeight: 700 }}>The lie:</div>
+                      <div style={{ marginTop: 6, padding: "10px 12px", borderRadius: 8, background: "#fff", boxShadow: "0 6px 14px rgba(0,0,0,0.06)", display: "inline-block", maxWidth: 520 }}>
+                        {selectedSet.statements[selectedSet.lieIndex]}
+                      </div>
+                    </div> */}
+                    <div style={{ marginTop: 12 }}>
+                      <button
+                        className="gumball-button"
+                        onClick={() => setState("initial")}
+                      >
+                        Play again
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {!revealed && (
+                  <div
+                    style={{
+                      marginTop: 12,
+                      color: "#666",
+                      textAlign: "center",
+                    }}
+                  >
+                    Pick the statement you think is the lie.
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ padding: 16 }}>No statements available.</div>
+            )}
+          </div>
         )}
       </div>
     </div>
@@ -1373,6 +1596,7 @@ function ShelfItem({ item, width, height }) {
   const [showGumballGame, setShowGumballGame] = useState(false);
   const [showBookRecs, setShowBookRecs] = useState(false);
   const [showMusicRecs, setShowMusicRecs] = useState(false);
+  const [showTwoTruthsGame, setShowTwoTruthsGame] = useState(false);
   const [showWordleGame, setShowWordleGame] = useState(false);
   const [showFoodGame, setShowFoodGame] = useState(false);
   const [faceSrc, setFaceSrc] = useState(null);
@@ -1498,6 +1722,9 @@ function ShelfItem({ item, width, height }) {
         if (result === "openMusicRecs") {
           setShowMusicRecs(true);
         }
+        if (result === "openTwoTruths") {
+          setShowTwoTruthsGame(true);
+        }
         if (result === "openWordleGame") {
           setShowWordleGame(true);
         }
@@ -1619,6 +1846,9 @@ function ShelfItem({ item, width, height }) {
       </div>
       {showGumballGame && (
         <GumballGame onClose={() => setShowGumballGame(false)} />
+      )}
+      {showTwoTruthsGame && (
+        <TwoTruthsGame onClose={() => setShowTwoTruthsGame(false)} />
       )}
       {showBookRecs && <BookRecs onClose={() => setShowBookRecs(false)} />}
       {showMusicRecs && <MusicRecs onClose={() => setShowMusicRecs(false)} />}
