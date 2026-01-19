@@ -303,6 +303,18 @@ function GumballGame({ onClose }) {
   const [gameState, setGameState] = useState("initial"); // 'initial', 'thinking', 'result'
   const [selectedSticker, setSelectedSticker] = useState(null);
 
+  useEffect(() => {
+    try {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    } catch (e) {
+      // ignore when not in browser
+    }
+  }, []);
+
   const STICKERS = [
     "assets/gumball/stickers/candy (1).png",
     "assets/gumball/stickers/candy.png",
@@ -392,6 +404,16 @@ function WordleGame({ onClose }) {
   const [guesses, setGuesses] = useState([]);
   const [current, setCurrent] = useState("");
   const [status, setStatus] = useState("playing"); // playing | won | lost
+
+  useEffect(() => {
+    try {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    } catch (e) {}
+  }, []);
 
   useEffect(() => {
     startNew();
@@ -569,6 +591,26 @@ function BookRecs({ onClose }) {
   const [state, setState] = useState("initial"); // 'initial' | 'thinking' | 'result'
   const [selected, setSelected] = useState(null);
   const [list, setList] = useState([]);
+
+  useEffect(() => {
+    try {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    } catch (e) {}
+  }, []);
+
+  useEffect(() => {
+    try {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    } catch (e) {}
+  }, []);
 
   useEffect(() => {
     // Load manifest as single source of truth. Manifest must be an array of
@@ -824,6 +866,16 @@ function FoodGame({ onClose }) {
   const dragStateRef = useRef({});
   const [dragPreview, setDragPreview] = useState(null); // { file, x, y }
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    try {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    } catch (e) {}
+  }, []);
 
   useEffect(() => {
     (async () => {
