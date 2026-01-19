@@ -431,8 +431,8 @@ body {
 
 /* Star shape */
 .pin-star {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   background: #ffda34;
   clip-path: polygon(
     50% 0%,
@@ -450,8 +450,8 @@ body {
 
 /* Heart shape */
 .pin-heart {
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   background: #f43c2f;
   transform: translateX(-50%) rotate(-45deg);
   transform-origin: center;
@@ -461,20 +461,20 @@ body {
 .pin-heart::after {
   content: "";
   position: absolute;
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   background: #f43c2f;
   border-radius: 50%;
 }
 
 .pin-heart::before {
-  top: -5px;
+  top: -6px;
   left: 0;
 }
 
 .pin-heart::after {
   top: 0;
-  left: 5px;
+  left: 6px;
 }
 
 .pin-point {
