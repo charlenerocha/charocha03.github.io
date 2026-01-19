@@ -334,10 +334,31 @@ function GumballGame({ onClose }) {
   const handleGetGumball = () => {
     setGameState("thinking");
 
-    // Show thinking animation for 2 seconds
+    // Show thinking animation for 1 second
     setTimeout(() => {
-      const randomSticker =
-        STICKERS[Math.floor(Math.random() * STICKERS.length)];
+      if (!STICKERS || STICKERS.length === 0) {
+        setSelectedSticker(null);
+        setGameState("result");
+        return;
+      }
+      // If only one sticker, return it
+      if (STICKERS.length === 1) {
+        setSelectedSticker(STICKERS[0]);
+        setGameState("result");
+        return;
+      }
+      // Pick a random sticker different from the previous one when possible
+      const prev = selectedSticker;
+      let randomSticker;
+      let attempts = 0;
+      do {
+        randomSticker = STICKERS[Math.floor(Math.random() * STICKERS.length)];
+        attempts++;
+      } while (randomSticker === prev && attempts < 10);
+      if (randomSticker === prev) {
+        // fallback: choose first different sticker deterministically
+        randomSticker = STICKERS.find((s) => s !== prev) || randomSticker;
+      }
       setSelectedSticker(randomSticker);
       setGameState("result");
     }, 1000);
@@ -664,7 +685,22 @@ function BookRecs({ onClose }) {
         setState("result");
         return;
       }
-      const pick = list[Math.floor(Math.random() * list.length)];
+      if (list.length === 1) {
+        setSelected(list[0]);
+        setState("result");
+        return;
+      }
+      // prefer a different recommendation than the previous one
+      const prevSrc = selected && selected.src ? selected.src : null;
+      let pick;
+      let attempts = 0;
+      do {
+        pick = list[Math.floor(Math.random() * list.length)];
+        attempts++;
+      } while (prevSrc && pick && pick.src === prevSrc && attempts < 10);
+      if (prevSrc && pick && pick.src === prevSrc) {
+        pick = list.find((i) => i.src !== prevSrc) || pick;
+      }
       setSelected(pick);
       setState("result");
     }, 800);
@@ -788,7 +824,22 @@ function MusicRecs({ onClose }) {
         setState("result");
         return;
       }
-      const pick = list[Math.floor(Math.random() * list.length)];
+      if (list.length === 1) {
+        setSelected(list[0]);
+        setState("result");
+        return;
+      }
+      // prefer a different album than the previous one
+      const prevSrc = selected && selected.src ? selected.src : null;
+      let pick;
+      let attempts = 0;
+      do {
+        pick = list[Math.floor(Math.random() * list.length)];
+        attempts++;
+      } while (prevSrc && pick && pick.src === prevSrc && attempts < 10);
+      if (prevSrc && pick && pick.src === prevSrc) {
+        pick = list.find((i) => i.src !== prevSrc) || pick;
+      }
       setSelected(pick);
       setState("result");
     }, 800);
@@ -1306,7 +1357,7 @@ function ShelfItem({ item, width, height }) {
   // Clicking while a face is visible will hide it, then replace it with a new face.
   // Use a ref to guard against rapid repeated clicks during the hide/replace transition.
 
-  const loadRandomFace = async () => {
+  const loadRandomFace = async (exclude) => {
     // Only load faces from the test assets directory per project rules
     const tryPaths = [`${MIRROR_FACES_PATH}faces.json`];
     for (const p of tryPaths) {
@@ -1316,23 +1367,32 @@ function ShelfItem({ item, width, height }) {
           console.debug("mirror: fetch not ok", p, resp.status);
           continue;
         }
-        const list = await resp.json();
-        if (!list || list.length === 0) {
+        const raw = await resp.json();
+        if (!raw || raw.length === 0) {
           console.debug("mirror: empty list", p);
           continue;
         }
-        const name = list[Math.floor(Math.random() * list.length)];
         const base = p.replace(/faces.json$/, "");
-        console.debug("mirror: using", base + name);
-        return base + name;
+        const fullList = raw.map((name) => base + name);
+        let choices = fullList;
+        if (exclude && fullList.length > 1) {
+          choices = fullList.filter((f) => f !== exclude);
+        }
+        const pick = choices[Math.floor(Math.random() * choices.length)];
+        console.debug("mirror: using", pick);
+        return pick;
       } catch (err) {
         console.debug("mirror: fetch failed", p, err);
       }
     }
     // Final fallback to bundled names (works even without JSON)
     const FALLBACK = ["face1.svg", "face2.svg", "face3.svg"];
-    const name = FALLBACK[Math.floor(Math.random() * FALLBACK.length)];
-    return MIRROR_FACES_PATH + name;
+    const fullFallback = FALLBACK.map((n) => MIRROR_FACES_PATH + n);
+    let choices = fullFallback;
+    if (exclude && fullFallback.length > 1) {
+      choices = fullFallback.filter((f) => f !== exclude);
+    }
+    return choices[Math.floor(Math.random() * choices.length)];
   };
 
   const handleMirrorClick = async (e) => {
@@ -1356,7 +1416,7 @@ function ShelfItem({ item, width, height }) {
     setFacePhase("hide");
     // Hide animation is ~320ms in CSS; wait a bit extra before replacing
     setTimeout(async () => {
-      const src = await loadRandomFace();
+      const src = await loadRandomFace(faceSrc);
       if (src) {
         setFaceSrc(src);
         // new face should animate in
