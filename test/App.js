@@ -81,7 +81,7 @@ const ITEMS = [
   {
     id: 8,
     name: "Gumball",
-    width: 0.6,
+    width: 0.5,
     image: "assets/gumball/gumball.png",
     action: {
       type: "openGumballGame",
@@ -92,14 +92,14 @@ const ITEMS = [
   {
     id: 4,
     name: "Map",
-    width: 1.2,
+    width: 1.0,
     image: "assets/random/map.jpg",
     verticalAlign: 20,
   },
   {
     id: 14,
     name: "Food",
-    width: 0.45,
+    width: 0.5,
     image: "assets/food/fruit.png",
     action: { type: "openFoodGame" },
   },
@@ -112,7 +112,7 @@ const ITEMS = [
   {
     id: 12,
     name: "Boombox",
-    width: 0.6,
+    width: 0.5,
     image: "assets/music/boombox.png",
     action: { type: "openMusicRecs" },
   },
@@ -121,7 +121,7 @@ const ITEMS = [
   {
     id: 3,
     name: "Aloe Vera",
-    width: 0.7,
+    width: 0.4,
     image: "assets/plants/aloe-vera.png",
   },
   {
@@ -1265,7 +1265,7 @@ function DynamicShelves() {
 
   const MIN_ITEM_SIZE = 80;
   const MAX_ITEM_SIZE = 150;
-  const ITEM_GAP = 5;
+  const ITEM_GAP = 15;
   const SHELF_VERTICAL_GAP = 30;
 
   const calculateLayout = () => {
