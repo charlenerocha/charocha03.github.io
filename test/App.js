@@ -74,7 +74,7 @@ const ITEMS = [
   {
     id: 1,
     name: "Monstera",
-    width: 0.8,
+    width: 0.7,
     image: "assets/plants/monstera.png",
     action: { type: "openWordleGame" },
   },
@@ -87,9 +87,16 @@ const ITEMS = [
     verticalAlign: 80,
   },
   {
+    id: 7,
+    name: "Camera",
+    width: 0.3,
+    image: "assets/camera/dslr-camera (1).png",
+    verticalAlign: 102,
+  },
+  {
     id: 8,
     name: "Gumball",
-    width: 0.5,
+    width: 0.4,
     image: "assets/gumball/gumball.png",
     action: {
       type: "openGumballGame",
@@ -98,13 +105,6 @@ const ITEMS = [
 
   // second row
   {
-    id: 4,
-    name: "Map",
-    width: 1.0,
-    image: "assets/random/map.jpg",
-    verticalAlign: 20,
-  },
-  {
     id: 14,
     name: "Food",
     width: 0.5,
@@ -112,26 +112,11 @@ const ITEMS = [
     action: { type: "openFoodGame" },
   },
   {
-    id: 2,
-    name: "Golden Pothos",
-    width: 0.7,
-    image: "assets/plants/golden-pothos.png",
-    action: { type: "openTwoTruthsGame" },
-  },
-  {
-    id: 12,
-    name: "Boombox",
-    width: 0.5,
-    image: "assets/music/boombox.png",
-    action: { type: "openMusicRecs" },
-  },
-
-  // third row
-  {
     id: 3,
-    name: "Aloe Vera",
-    width: 0.4,
-    image: "assets/plants/aloe-vera.png",
+    name: "Board",
+    width: 0.6,
+    image: "assets/board/corkboard.png",
+    verticalAlign: 70,
   },
   {
     id: 13,
@@ -141,11 +126,35 @@ const ITEMS = [
     action: { type: "openBookRecs" },
   },
   {
+    id: 4,
+    name: "Map",
+    width: 0.8,
+    image: "assets/random/map.jpg",
+    verticalAlign: 20,
+  },
+
+  // third row
+  {
+    id: 2,
+    name: "Golden Pothos",
+    width: 0.6,
+    image: "assets/plants/golden-pothos.png",
+    action: { type: "openTwoTruthsGame" },
+  },
+
+  {
     id: 7,
     name: "Lamp",
     width: 0.6,
     image: "assets/lighting/lamp3.png",
     action: { type: "toggleLamp" },
+  },
+  {
+    id: 12,
+    name: "Boombox",
+    width: 0.5,
+    image: "assets/music/boombox.png",
+    action: { type: "openMusicRecs" },
   },
   {
     id: 5,
@@ -643,18 +652,7 @@ function TwoTruthsGame({ onClose }) {
 
 // Wordle-style game shown when Monstera is clicked
 function WordleGame({ onClose }) {
-  const WORDS = [
-    "shelf",
-    "build",
-    "bytes",
-    "story",
-    "light",
-    "plush",
-    "words",
-    "craft",
-    "focus",
-    "plant",
-  ];
+  const WORDS = ["shelf", "story", "rocha", "build", "photo", "learn", "plant"];
   const [answer, setAnswer] = useState(null);
   const [guesses, setGuesses] = useState([]);
   const [current, setCurrent] = useState("");
