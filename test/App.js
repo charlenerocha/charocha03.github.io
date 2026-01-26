@@ -74,24 +74,17 @@ const ITEMS = [
   {
     id: 1,
     name: "Monstera",
-    width: 0.7,
+    width: 0.6,
     image: "assets/plants/monstera.png",
     action: { type: "openWordleGame" },
   },
   {
     id: 2,
     name: "Mirror",
-    width: 0.7,
+    width: 0.6,
     image: "assets/mirror/frame.png",
     action: { type: "mirror" },
     verticalAlign: 80,
-  },
-  {
-    id: 7,
-    name: "Camera",
-    width: 0.3,
-    image: "assets/camera/dslr-camera (1).png",
-    verticalAlign: 102,
   },
   {
     id: 8,
@@ -105,6 +98,13 @@ const ITEMS = [
 
   // second row
   {
+    id: 7,
+    name: "Camera",
+    width: 0.4,
+    image: "assets/camera/dslr-camera (1).png",
+    verticalAlign: 102,
+  },
+  {
     id: 14,
     name: "Food",
     width: 0.5,
@@ -112,10 +112,10 @@ const ITEMS = [
     action: { type: "openFoodGame" },
   },
   {
-    id: 3,
-    name: "Board",
-    width: 0.6,
-    image: "assets/board/corkboard.png",
+    id: 4,
+    name: "Map",
+    width: 0.8,
+    image: "assets/random/map.jpg",
     verticalAlign: 70,
   },
   {
@@ -125,29 +125,21 @@ const ITEMS = [
     image: "assets/books/books (1).png",
     action: { type: "openBookRecs" },
   },
-  {
-    id: 4,
-    name: "Map",
-    width: 0.8,
-    image: "assets/random/map.jpg",
-    verticalAlign: 20,
-  },
 
   // third row
-  {
-    id: 2,
-    name: "Golden Pothos",
-    width: 0.6,
-    image: "assets/plants/golden-pothos.png",
-    action: { type: "openTwoTruthsGame" },
-  },
-
   {
     id: 7,
     name: "Lamp",
     width: 0.6,
     image: "assets/lighting/lamp3.png",
     action: { type: "toggleLamp" },
+  },
+  {
+    id: 2,
+    name: "Golden Pothos",
+    width: 0.6,
+    image: "assets/plants/golden-pothos.png",
+    action: { type: "openTwoTruthsGame" },
   },
   {
     id: 12,
@@ -163,6 +155,13 @@ const ITEMS = [
     image: "assets/piggy/piggy-bank (2).png",
   },
 
+  // {
+  //   id: 3,
+  //   name: "Board",
+  //   width: 0.6,
+  //   image: "assets/board/corkboard.png",
+  //   verticalAlign: 70,
+  // },
   // {
   //   id: 5,
   //   name: "Succulent",
@@ -266,6 +265,7 @@ function MapWithPins({ item, width, height }) {
         width: `${width}px`,
         height: `${height}px`,
         position: "relative",
+        "--vertical-align": `${item.verticalAlign ?? 100}%`,
       }}
     >
       <div className="item-image-container">
@@ -1877,7 +1877,7 @@ function DynamicShelves() {
   const [shelfSizes, setShelfSizes] = useState([]);
 
   const MIN_ITEM_SIZE = 80;
-  const MAX_ITEM_SIZE = 150;
+  const MAX_ITEM_SIZE = 250;
   const ITEM_GAP = 15;
   const SHELF_VERTICAL_GAP = 30;
 
@@ -1887,6 +1887,7 @@ function DynamicShelves() {
 
     const containerWidth = containerRef.current.offsetWidth;
     const totalItems = ITEMS.length;
+    const isMobile = window.innerWidth <= 768;
 
     // Calculate total width units for all items
     const totalWidthUnits = ITEMS.reduce((sum, item) => sum + item.width, 0);
@@ -1895,6 +1896,35 @@ function DynamicShelves() {
     let startingItemIndex = 0;
     let bestSize = MIN_ITEM_SIZE;
 
+    // Mobile: force exactly 4 items per shelf
+    if (isMobile) {
+      const ITEMS_PER_SHELF = 4;
+      while (startingItemIndex < totalItems) {
+        const shelfItems = ITEMS.slice(
+          startingItemIndex,
+          startingItemIndex + ITEMS_PER_SHELF,
+        );
+        const shelfWidthUnits = shelfItems.reduce(
+          (sum, it) => sum + it.width,
+          0,
+        );
+        const availableWidth =
+          containerWidth - (shelfItems.length - 1) * ITEM_GAP;
+        const shelfSize = Math.max(
+          MIN_ITEM_SIZE,
+          Math.min(MAX_ITEM_SIZE, availableWidth / shelfWidthUnits),
+        );
+        newShelves.push(shelfItems);
+        newShelfSizes.push(shelfSize);
+        startingItemIndex += shelfItems.length;
+      }
+      setShelves(newShelves);
+      setShelfSizes(newShelfSizes);
+      setItemSize(newShelfSizes[0] || MIN_ITEM_SIZE);
+      return;
+    }
+
+    // Desktop: existing algorithm
     while (startingItemIndex < totalItems) {
       const numRemainingItems = totalItems - startingItemIndex;
 
@@ -1952,8 +1982,6 @@ function DynamicShelves() {
       }
 
       // Distribute items across shelves
-      // const newShelves = [];
-      // for (let i = 0; i < totalItems; i += bestLayout) {
       const shelfItems = ITEMS.slice(
         startingItemIndex,
         startingItemIndex + bestLayout,
@@ -1969,20 +1997,6 @@ function DynamicShelves() {
       newShelves.push(shelfItems);
       newShelfSizes.push(shelfSize);
       startingItemIndex += shelfItems.length;
-      // }
-
-      // Compute a size (px) for each shelf so it fills the container width
-      // const newShelfSizes = newShelves.map((shelfItems) => {
-      //   const shelfWidthUnits = shelfItems.reduce((sum, it) => sum + it.width, 0);
-      //   const availableWidth =
-      //     containerWidth - (shelfItems.length - 1) * ITEM_GAP;
-      //   // Constrain to MIN/MAX and keep as float for precise layout
-      //   const size = Math.max(
-      //     MIN_ITEM_SIZE,
-      //     Math.min(MAX_ITEM_SIZE, availableWidth / shelfWidthUnits)
-      //   );
-      //   return size;
-      // });
     }
 
     setShelves(newShelves);
