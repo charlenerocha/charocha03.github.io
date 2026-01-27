@@ -21,6 +21,12 @@ body {
   position: relative;
 }
 
+body.no-scroll {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+}
+
 /* Subtle sparkle overlay effect */
 .sparkles-overlay {
   position: fixed;
@@ -825,12 +831,9 @@ body {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
-  /* allow scrolling when popup is taller than the viewport */
-  overflow-y: auto;
-  /* center popups by default (both horizontally and vertically) */
+  overflow: hidden;
   align-items: center;
   justify-content: center;
-  /* provide padding so top content is not cut off on small screens */
   padding: 32px 16px;
   z-index: 10000;
   animation: overlayFadeIn 0.3s ease-out;
