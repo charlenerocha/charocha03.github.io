@@ -15,8 +15,7 @@ body {
   background-repeat: no-repeat;
   /* allow the page to grow taller than the viewport on small devices */
   min-height: 100vh;
-  /* keep horizontal overflow hidden but allow vertical scrolling */
-  overflow-x: hidden;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
