@@ -1843,7 +1843,7 @@ function ShelfItem({ item, width, height }) {
         {faceSrc && (
           <div
             className="mirror-face-container"
-            style={{ bottom: `${Math.max(6, Math.round(height * 0.32))}px` }}
+            style={{ bottom: `${Math.max(6, Math.round(height * 0.293))}px` }}
           >
             <img
               src={faceSrc}
