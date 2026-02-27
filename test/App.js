@@ -22,6 +22,51 @@ const MIRROR_FACES_PATH = "assets/mirror/faces/";
   }
 })();
 
+// inject photobook styles for scrapbook look
+(function injectPhotobookStyles() {
+  try {
+    if (document.getElementById("photobook-styles")) return;
+    const css = `
+      .photobook-popup{ background: linear-gradient(180deg,#fffaf6,#fff6f0); border-radius:12px; padding:16px; overflow:hidden; max-height:80vh; }
+      .photobook-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; max-height:calc(80vh - 120px); overflow:auto; padding:6px; }
+      .photobook-thumb{ background:#fff; border-radius:8px; overflow:hidden; position:relative; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+      .photobook-thumb img{ width:100%; height:100%; display:block; object-fit:cover; }
+      .photobook-thumb .thumb-washi{ position:absolute; left:8px; top:6px; width:48px; height:12px; background:linear-gradient(90deg,#ffd1dc,#ffd6a8); transform:rotate(-8deg); border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
+      .photobook-viewer{ position:relative; background:transparent; border-radius:10px; padding:6px 0; overflow:visible; pointer-events:none; }
+      .photobook-viewer .viewer-tape{ position:absolute; width:72px; height:18px; background:linear-gradient(90deg,#ffd1dc,#ffd6a8); top:8px; border-radius:3px; box-shadow:0 4px 12px rgba(0,0,0,0.12); }
+      .photobook-viewer .viewer-tape.left{ left:20px; transform:rotate(-12deg); }
+      .photobook-viewer .viewer-tape.right{ right:20px; transform:rotate(10deg); }
+      .photobook-viewer img{ width:100%; max-height:calc(80vh - 220px); object-fit:contain; display:block; margin:0 auto; }
+      .photobook-heart{ position:absolute; width:28px; height:28px; background-size:contain; background-repeat:no-repeat; opacity:0.95; pointer-events:none; }
+      .photobook-heart.h1{ left:14px; bottom:14px; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ff6b9a' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
+      .photobook-heart.h2{ right:18px; top:18px; transform:scale(0.9); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffb3c6' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
+      .photobook-heart.h3{ left:8px; top:12px; transform:scale(0.75); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ff9bb7' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
+      .photobook-heart.h4{ right:6px; bottom:40px; transform:scale(0.6); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffd1e0' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
+      // .photobook-heart.h5{ left:50%; top:28px; transform:translateX(-50%) scale(0.85); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ff7fa2' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
+      .photobook-heart.h6{ left:80%; top:6px; transform:scale(0.85); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffc0d0' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
+      .photobook-heart.animate{ animation: floaty 5s ease-in-out infinite; }
+      @keyframes floaty { 0%{ transform:translateY(0) } 50%{ transform:translateY(-8px) } 100%{ transform:translateY(0) } }
+      /* ensure buttons match aesthetic and icons are visible */
+      .photobook-popup .gumball-button{
+        background:#fff0f6;
+        color:#ffb8c9;
+        padding:8px 12px;
+        border-radius:8px;
+        font-weight:700;
+        font-size:16px;
+        min-width:44px;
+      }
+      .photobook-popup .gumball-button:disabled{ opacity:0.5; filter:grayscale(20%); color:#ffd1dc; }
+        .photobook-footer{ display:flex; gap:10px; margin-top:12px; }
+        .photobook-footer .gumball-button{ flex:1; }
+    `;
+    const s = document.createElement("style");
+    s.id = "photobook-styles";
+    s.appendChild(document.createTextNode(css));
+    document.head.appendChild(s);
+  } catch (e) {}
+})();
+
 // Action handlers for shelf items
 const ITEM_ACTIONS = {
   openLink: (url) => {
@@ -49,6 +94,9 @@ const ITEM_ACTIONS = {
   openWordleGame: () => {
     // signal to ShelfItem to open the Monstera wordle popup
     return "openWordleGame";
+  },
+  openPhotobook: () => {
+    return "openPhotobook";
   },
   // Add more action handlers here as needed for popups, modals, etc.
 };
@@ -103,6 +151,7 @@ const ITEMS = [
     width: 0.4,
     image: "assets/camera/dslr-camera (1).png",
     verticalAlign: 102,
+    action: { type: "openPhotobook" },
   },
   {
     id: 14,
@@ -1609,11 +1658,145 @@ function FoodGame({ onClose }) {
   );
 }
 
+// Photobook Component: displays all images in assets/camera/pics
+function Photobook({ onClose }) {
+  const [list, setList] = useState([]);
+  const [index, setIndex] = useState(0); // always open in viewer at first image
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    let prev = null;
+    try {
+      prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+    } catch (e) {}
+    return () => {
+      try {
+        document.body.style.overflow = prev;
+      } catch (e) {}
+    };
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const manifestPath = "assets/camera/pics/manifest.json";
+      try {
+        const r = await fetch(manifestPath);
+        if (!r.ok) {
+          console.warn("Photobook: manifest not found:", manifestPath);
+          setList([]);
+          return;
+        }
+        const arr = await r.json();
+        if (!arr || !arr.length) {
+          setList([]);
+          return;
+        }
+        const normalized = arr
+          .map((it) =>
+            typeof it === "string" ? `assets/camera/pics/${it}` : null,
+          )
+          .filter(Boolean);
+        setList(normalized);
+        // open to first image as soon as list is available
+        setIndex(0);
+      } catch (err) {
+        console.warn("Photobook: failed loading manifest", err);
+        setList([]);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowRight")
+        setIndex((i) => (list.length ? (i + 1) % list.length : i));
+      if (e.key === "ArrowLeft")
+        setIndex((i) =>
+          list.length ? (i - 1 + list.length) % list.length : i,
+        );
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [list.length, onClose]);
+
+  const openViewer = (i) => setIndex(i);
+  const closeViewer = () => setIndex(-1);
+
+  const handleOverlayClick = (e) => {
+    if (
+      e.target.classList &&
+      e.target.classList.contains("photobook-overlay")
+    ) {
+      onClose();
+    }
+  };
+
+  return (
+    <div
+      className="gumball-overlay photobook-overlay"
+      onClick={handleOverlayClick}
+    >
+      <div
+        className="gumball-popup photobook-popup"
+        style={{ maxWidth: 980, width: "95%" }}
+        ref={containerRef}
+      >
+        <h2 className="gumball-title">Photobook</h2>
+        {list.length === 0 ? (
+          <div style={{ padding: 16 }}>
+            No images found. Generate a manifest at{" "}
+            <strong>assets/camera/pics/manifest.json</strong>.
+          </div>
+        ) : (
+          <>
+            <div style={{ textAlign: "center" }}>
+              <div className="photobook-viewer">
+                <div className="viewer-tape left" />
+                <div className="viewer-tape right" />
+                <img src={list[index]} alt={`photo-${index}`} />
+                <div className="photobook-heart h1 animate" />
+                <div className="photobook-heart h2 animate" />
+                <div className="photobook-heart h3" />
+                <div className="photobook-heart h4" />
+                <div className="photobook-heart h5 animate" />
+                <div className="photobook-heart h6" />
+              </div>
+              <div className="photobook-footer">
+                <button
+                  className="gumball-button"
+                  onClick={() =>
+                    setIndex((i) =>
+                      list.length ? (i - 1 + list.length) % list.length : i,
+                    )
+                  }
+                >
+                  ◀
+                </button>
+                <button
+                  className="gumball-button"
+                  onClick={() =>
+                    setIndex((i) => (list.length ? (i + 1) % list.length : i))
+                  }
+                >
+                  ▶
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ShelfItem Component
 function ShelfItem({ item, width, height }) {
   const [showGumballGame, setShowGumballGame] = useState(false);
   const [showBookRecs, setShowBookRecs] = useState(false);
   const [showMusicRecs, setShowMusicRecs] = useState(false);
+  const [showPhotobook, setShowPhotobook] = useState(false);
   const [showTwoTruthsGame, setShowTwoTruthsGame] = useState(false);
   const [showWordleGame, setShowWordleGame] = useState(false);
   const [showFoodGame, setShowFoodGame] = useState(false);
@@ -1739,6 +1922,9 @@ function ShelfItem({ item, width, height }) {
         }
         if (result === "openMusicRecs") {
           setShowMusicRecs(true);
+        }
+        if (result === "openPhotobook") {
+          setShowPhotobook(true);
         }
         if (result === "openTwoTruths") {
           setShowTwoTruthsGame(true);
@@ -1868,6 +2054,7 @@ function ShelfItem({ item, width, height }) {
       {showTwoTruthsGame && (
         <TwoTruthsGame onClose={() => setShowTwoTruthsGame(false)} />
       )}
+      {showPhotobook && <Photobook onClose={() => setShowPhotobook(false)} />}
       {showBookRecs && <BookRecs onClose={() => setShowBookRecs(false)} />}
       {showMusicRecs && <MusicRecs onClose={() => setShowMusicRecs(false)} />}
       {showWordleGame && (
