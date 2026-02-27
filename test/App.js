@@ -317,11 +317,17 @@ function GumballGame({ onClose }) {
   const [selectedSticker, setSelectedSticker] = useState(null);
 
   useEffect(() => {
+    let scrollY = 0;
+
     try {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
+      scrollY = window.scrollY;
+      document.body.classList.add("no-scroll");
+      document.body.style.top = `-${scrollY}px`;
+
       return () => {
-        document.body.style.overflow = prev;
+        document.body.classList.remove("no-scroll");
+        document.body.style.top = "";
+        window.scrollTo(0, scrollY);
       };
     } catch (e) {
       // ignore when not in browser
@@ -1384,7 +1390,10 @@ function FoodGame({ onClose }) {
       className="gumball-overlay book-overlay food-overlay"
       onClick={handleOverlayClick}
     >
-      <div className="gumball-popup" style={{ maxWidth: 720 }}>
+      <div
+        className="gumball-popup page-scroll hide-scrollbar"
+        style={{ maxWidth: 720 }}
+      >
         <h2 className="gumball-title">Food sorting!</h2>
         <p className="gumball-description">
           I'm quite the picky eater so try sorting my food hot takes!

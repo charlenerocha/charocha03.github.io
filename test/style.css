@@ -4,6 +4,17 @@
   box-sizing: border-box;
 }
 
+/* Utility class: add to any scrollable element to hide its scrollbar but keep scrolling */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE + Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-image:
@@ -15,10 +26,20 @@ body {
   background-repeat: no-repeat;
   /* allow the page to grow taller than the viewport on small devices */
   min-height: 100vh;
+  /* body itself will not scroll; use `.page-scroll` as the scroll container */
   overflow: hidden;
   display: flex;
   flex-direction: column;
   position: relative;
+}
+
+/* Scrollable page wrapper: use this to preserve scrolling while hiding native scrollbars */
+.page-scroll {
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 body.no-scroll {
