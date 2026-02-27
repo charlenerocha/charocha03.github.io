@@ -31,15 +31,16 @@ const MIRROR_FACES_PATH = "assets/mirror/faces/";
       .photobook-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; max-height:calc(80vh - 120px); overflow:auto; padding:6px; }
       .photobook-thumb{ background:#fff; border-radius:8px; overflow:hidden; position:relative; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
       .photobook-thumb img{ width:100%; height:100%; display:block; object-fit:cover; }
-      .photobook-thumb .thumb-washi{ position:absolute; left:8px; top:6px; width:48px; height:12px; background:linear-gradient(90deg,#ffd1dc,#ffd6a8); transform:rotate(-8deg); border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.12); }
-      .photobook-viewer{ position:relative; background:transparent; border-radius:10px; padding:6px 0; overflow:visible; pointer-events:none; }
-      .photobook-viewer .viewer-tape{ position:absolute; width:72px; height:18px; background:linear-gradient(90deg,#ffd1dc,#ffd6a8); top:8px; border-radius:3px; box-shadow:0 4px 12px rgba(0,0,0,0.12); }
-      .photobook-viewer .viewer-tape.left{ left:20px; transform:rotate(-12deg); }
-      .photobook-viewer .viewer-tape.right{ right:20px; transform:rotate(10deg); }
-      .photobook-viewer img{ width:100%; max-height:calc(80vh - 220px); object-fit:contain; display:block; margin:0 auto; }
+      .photobook-viewer{ position:relative; background:transparent; border-radius:10px; padding:6px 0; overflow:visible; }
+      /* photo-frame will size to the actual displayed image so corner tapes align */
+      .photo-frame{ display:inline-block; position:relative; pointer-events:none; }
+      .photo-frame img{ display:block; width:auto; height:auto; max-width:100%; max-height:calc(80vh - 220px); border-radius:6px; }
+      .photo-frame .viewer-washi{ position:absolute; width:64px; height:14px; background:linear-gradient(90deg,#ffd1dc,#ffd6a8); border-radius:3px; box-shadow:0 4px 10px rgba(0,0,0,0.12); pointer-events:none; }
+      .photo-frame .viewer-washi.tl{ left:-8px; top:-8px; transform:rotate(-10deg); }
+      .photo-frame .viewer-washi.br{ right:-8px; bottom:-8px; transform:rotate(-10deg); background:linear-gradient(90deg,#ffd6a8,#ffd1dc); }
       .photobook-heart{ position:absolute; width:28px; height:28px; background-size:contain; background-repeat:no-repeat; opacity:0.95; pointer-events:none; }
       .photobook-heart.h1{ left:14px; bottom:14px; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ff6b9a' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
-      .photobook-heart.h2{ right:18px; top:18px; transform:scale(0.9); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffb3c6' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
+      .photobook-heart.h2{ right:28px; top:28px; transform:scale(0.9); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffb3c6' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
       .photobook-heart.h3{ left:8px; top:12px; transform:scale(0.75); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ff9bb7' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
       .photobook-heart.h4{ right:6px; bottom:40px; transform:scale(0.6); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffd1e0' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
       // .photobook-heart.h5{ left:50%; top:28px; transform:translateX(-50%) scale(0.85); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ff7fa2' d='M12 21s-7-4.35-9.5-7.5C.5 8.5 6 4 9 7c1.5 1.5 3 3 3 3s1.5-1.5 3-3c3-3 8.5.5 6.5 6.5C19 16.65 12 21 12 21z'/></svg>"); }
@@ -1755,13 +1756,17 @@ function Photobook({ onClose }) {
               <div className="photobook-viewer">
                 <div className="viewer-tape left" />
                 <div className="viewer-tape right" />
-                <img src={list[index]} alt={`photo-${index}`} />
-                <div className="photobook-heart h1 animate" />
-                <div className="photobook-heart h2 animate" />
-                <div className="photobook-heart h3" />
-                <div className="photobook-heart h4" />
-                <div className="photobook-heart h5 animate" />
-                <div className="photobook-heart h6" />
+                <div className="photo-frame">
+                  <div className="viewer-washi tl" />
+                  <img src={list[index]} alt={`photo-${index}`} />
+                  <div className="viewer-washi br" />
+                  <div className="photobook-heart h1 animate" />
+                  <div className="photobook-heart h2 animate" />
+                  <div className="photobook-heart h3" />
+                  <div className="photobook-heart h4" />
+                  <div className="photobook-heart h5 animate" />
+                  <div className="photobook-heart h6" />
+                </div>
               </div>
               <div className="photobook-footer">
                 <button
