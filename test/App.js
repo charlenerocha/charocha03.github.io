@@ -1440,10 +1440,7 @@ function FoodGame({ onClose }) {
       className="gumball-overlay book-overlay food-overlay"
       onClick={handleOverlayClick}
     >
-      <div
-        className="gumball-popup hide-scrollbar"
-        style={{ maxWidth: 720 }}
-      >
+      <div className="gumball-popup hide-scrollbar" style={{ maxWidth: 720 }}>
         <h2 className="gumball-title">Food sorting!</h2>
         <p className="gumball-description">
           I'm quite the picky eater so try sorting my food hot takes!
