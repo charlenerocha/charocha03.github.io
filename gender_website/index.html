@@ -9,6 +9,72 @@
       name="description"
       content="An interactive, reflective essay about gender and identity."
     />
+    <style>
+      .rating-scale {
+        max-width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.95rem;
+      }
+      .rating-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem 0;
+      }
+      .rating-item label {
+        flex: 1;
+        margin: 0;
+      }
+      .rating-widget .rating-item label {
+        font-size: 0.88rem;
+      }
+      .rating-item input[type="range"] {
+        width: 140px;
+      }
+      .rating-value output {
+        display: inline-block;
+        width: 2.2ch;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      /* Intro two-column layout: text + compact widget */
+      .intro-grid {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      .intro-text {
+        flex: 1;
+      }
+      .rating-widget {
+        width: 260px;
+        background: #fbfbfb;
+        border: 1px solid #e7e7e7;
+        padding: 0.75rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      }
+      .rating-widget .rating-scale {
+        margin: 0;
+      }
+
+      @media (max-width: 700px) {
+        .intro-grid {
+          flex-direction: column;
+        }
+        .rating-widget {
+          width: 100%;
+        }
+        .rating-item {
+          flex-direction: row;
+          align-items: center;
+        }
+        .rating-item input[type="range"] {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
     <main class="site">
@@ -18,6 +84,7 @@
           <p class="subtitle">
             Exploration, context, and reflection on identity
           </p>
+
           <div class="accent-row">
             <svg
               class="accent"
@@ -52,47 +119,114 @@
       <section id="intro" class="section panel">
         <div class="panel-inner">
           <h2 class="section-title">Introduction</h2>
-          <p class="lead">
-            This interactive essay invites you to explore how
-            <span
-              class="kw"
-              tabindex="0"
-              aria-label="Social and cultural meanings attached to perceived sex and identity."
-              data-def="Social and cultural meanings attached to perceived sex and identity."
-              >gender</span
+          <div class="intro-grid">
+            <div class="intro-text">
+              <p class="lead">
+                This interactive essay invites you to explore how
+                <span
+                  class="kw"
+                  tabindex="0"
+                  aria-label="Social and cultural meanings attached to perceived sex and identity."
+                  data-def="Social and cultural meanings attached to perceived sex and identity."
+                  >gender</span
+                >
+                and
+                <span
+                  class="kw"
+                  tabindex="0"
+                  aria-label="One's internal sense of self in relation to gender."
+                  data-def="One's internal sense of self in relation to gender."
+                  >identity</span
+                >
+                intersect with
+                <span
+                  class="kw"
+                  tabindex="0"
+                  aria-label="A process of acquiring knowledge or skills through experience or education."
+                  data-def="A process of acquiring knowledge or skills through experience or education."
+                  >learning</span
+                >,
+                <span
+                  class="kw"
+                  tabindex="0"
+                  aria-label="Groups and connections that shape how people belong or relate to one another."
+                  data-def="Groups and connections that shape how people belong or relate to one another."
+                  >community</span
+                >, and
+                <span
+                  class="kw"
+                  tabindex="0"
+                  aria-label="The real-world experiences people live that shape their perspectives and identities."
+                  data-def="The real-world experiences people live that shape their perspectives and identities."
+                  >lived experience</span
+                >. Scroll, reflect, and interact with the glossary and prompts
+                to make the material your own.
+              </p>
+            </div>
+            <aside
+              class="rating-widget"
+              aria-labelledby="rating-title"
+              role="complementary"
             >
-            and
-            <span
-              class="kw"
-              tabindex="0"
-              aria-label="One's internal sense of self in relation to gender."
-              data-def="One's internal sense of self in relation to gender."
-              >identity</span
-            >
-            intersect with
-            <span
-              class="kw"
-              tabindex="0"
-              aria-label="A process of acquiring knowledge or skills through experience or education."
-              data-def="A process of acquiring knowledge or skills through experience or education."
-              >learning</span
-            >,
-            <span
-              class="kw"
-              tabindex="0"
-              aria-label="Groups and connections that shape how people belong or relate to one another."
-              data-def="Groups and connections that shape how people belong or relate to one another."
-              >community</span
-            >, and
-            <span
-              class="kw"
-              tabindex="0"
-              aria-label="The real-world experiences people live that shape their perspectives and identities."
-              data-def="The real-world experiences people live that shape their perspectives and identities."
-              >lived experience</span
-            >. Scroll, reflect, and interact with the glossary and prompts to
-            make the material your own.
-          </p>
+              <div class="rating-scale">
+                <h3 id="rating-title" class="sr-only">
+                  Self-rating: confidence and knowledge
+                </h3>
+                <div class="rating-item">
+                  <label for="r1"
+                    >How comfortable do you feel discussing gender?
+                    <span class="rating-value"><output>5</output></span></label
+                  >
+                  <input
+                    id="r1"
+                    type="range"
+                    min="1"
+                    max="10"
+                    value="5"
+                    oninput="
+                      this.parentNode.querySelector('output').value = this.value
+                    "
+                  />
+                </div>
+                <div class="rating-item">
+                  <label for="r2"
+                    >How well can you define gender?
+                    <span class="rating-value"><output>5</output></span></label
+                  >
+                  <input
+                    id="r2"
+                    type="range"
+                    min="1"
+                    max="10"
+                    value="5"
+                    oninput="
+                      this.parentNode.querySelector('output').value = this.value
+                    "
+                  />
+                </div>
+                <div class="rating-item">
+                  <label for="r3"
+                    >How well can you explain the history of gender?
+                    <span class="rating-value"><output>5</output></span></label
+                  >
+                  <input
+                    id="r3"
+                    type="range"
+                    min="1"
+                    max="10"
+                    value="5"
+                    oninput="
+                      this.parentNode.querySelector('output').value = this.value
+                    "
+                  />
+                </div>
+                <p style="font-size: 0.85rem; margin: 0.25rem 0 0; color: #555">
+                  Move the sliders to select a number (1–10) that represents
+                  your current confidence or knowledge.
+                </p>
+              </div>
+            </aside>
+          </div>
         </div>
       </section>
 
