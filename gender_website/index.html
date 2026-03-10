@@ -84,27 +84,6 @@
           <p class="subtitle">
             Exploration, context, and reflection on identity
           </p>
-
-          <div class="accent-row">
-            <svg
-              class="accent"
-              viewBox="0 0 200 40"
-              preserveAspectRatio="none"
-              aria-hidden
-            >
-              <defs>
-                <linearGradient id="g1" x1="0" x2="1">
-                  <stop offset="0" />
-                  <stop offset="1" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M0 30 Q50 0 100 30 T200 30 L200 40 L0 40 Z"
-                fill="url(#g1)"
-                opacity="0.9"
-              ></path>
-            </svg>
-          </div>
         </div>
       </header>
 
@@ -230,7 +209,7 @@
         </div>
       </section>
 
-      <section id="main-idea" class="section panel soft">
+      <section id="main-idea" class="section panel">
         <div class="panel-inner">
           <h2 class="section-title">Main Idea</h2>
           <h3 class="idea-title">
@@ -284,6 +263,39 @@
                 Reflection prompt: When did you first notice gender expectations
                 in your life? Try writing a short note or thinking about one
                 concrete example.
+              </div>
+              <div class="quiz" data-correct="b" aria-labelledby="quiz-title">
+                <h4 id="quiz-title" class="quiz-title">Quick check</h4>
+                <p class="quiz-question">
+                  Which statement best reflects the main idea of this section?
+                </p>
+                <p
+                  style="
+                    font-size: 0.85rem;
+                    margin: 0 0 8px;
+                    color: var(--muted);
+                  "
+                >
+                  Take a moment to reflect, then pick the answer below.
+                </p>
+                <div class="quiz-choices" role="list">
+                  <button type="button" class="quiz-choice" data-choice="a">
+                    A. Gender is a single, fixed category determined only by
+                    biology.
+                  </button>
+                  <button type="button" class="quiz-choice" data-choice="b">
+                    B. Gender is learned and shaped by culture, context, and
+                    institutions.
+                  </button>
+                  <button type="button" class="quiz-choice" data-choice="c">
+                    C. Gender has no relation to language, media, or education.
+                  </button>
+                  <button type="button" class="quiz-choice" data-choice="d">
+                    D. Gender expectations are universal and identical across
+                    all communities.
+                  </button>
+                </div>
+                <div class="quiz-feedback" aria-live="polite"></div>
               </div>
             </div>
 
@@ -355,7 +367,7 @@
         </div>
       </section>
 
-      <section id="glossary" class="section panel soft">
+      <section id="glossary" class="section panel">
         <div class="panel-inner">
           <h2 class="section-title">Glossary</h2>
           <div class="glossary">
