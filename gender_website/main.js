@@ -25,11 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Reflection prompt: allow small private note saved to localStorage
   document.querySelectorAll(".callout").forEach((call) => {
     call.style.cursor = "pointer";
-    call.title = "Click to jot a private reflection (saved locally)";
+    call.title = "Click to write a private reflection (only saved locally)";
     call.addEventListener("click", async () => {
       const prev = localStorage.getItem("gender-reflection") || "";
       const note = prompt(
-        "Write a short reflection (saved only in this browser):",
+        "Write a short reflection (only saved locally):",
         prev,
       );
       if (note !== null) {

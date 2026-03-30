@@ -190,6 +190,8 @@ body {
 }
 .text-col p {
   margin: 0 0 12px;
+  color: var(--muted);
+  line-height: 1.6;
 }
 .image-col figure {
   margin: 0 0 12px;
