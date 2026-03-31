@@ -9,6 +9,7 @@
   --heading-color: #2f2e2f;
   --heading-2: #a580cf;
   --muted: #2f2e2fda;
+  --muted-link: #920b92da;
   --kw-color: #d264b6;
 
   --accent-1: #a580cf;
@@ -354,6 +355,11 @@ button:focus,
 details:focus {
   outline: 2px dashed var(--focus-outline-color);
   outline-offset: 3px;
+}
+
+.citation {
+  color: var(--muted-link);
+  text-decoration: none;
 }
 
 /* Keyword tooltip (uses data-def attr). keyboard-focusable via tabindex on element */

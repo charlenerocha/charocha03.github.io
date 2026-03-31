@@ -49,11 +49,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Quiz interaction: multiple-choice with immediate feedback
-  document.querySelectorAll(".quiz").forEach((quiz) => {
+  // Quiz interaction: multiple-choice with immediate feedback (generic handler)
+  document.querySelectorAll(".quiz").forEach((quiz, index) => {
     const correct = quiz.dataset.correct;
     const choices = quiz.querySelectorAll(".quiz-choice");
     const feedback = quiz.querySelector(".quiz-feedback");
+
+    // per-quiz custom messages (fallback to generic)
+    const msgCorrect =
+      quiz.dataset.feedbackCorrect ||
+      "Correct — nice work. This matches the main idea in the section.";
+    const msgIncorrect =
+      quiz.dataset.feedbackIncorrect ||
+      "Not quite — review the section; the correct answer is highlighted.";
 
     choices.forEach((btn) => {
       btn.setAttribute("role", "button");
@@ -63,20 +71,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const picked = btn.dataset.choice;
         if (picked === correct) {
           btn.classList.add("correct");
-          feedback.textContent =
-            "Correct — gender is described here as a learning process shaped by culture and experience.";
-          feedback.classList.remove("error");
-          feedback.classList.add("success");
+          if (feedback) {
+            feedback.textContent = msgCorrect;
+            feedback.classList.remove("error");
+            feedback.classList.add("success");
+          }
         } else {
           btn.classList.add("incorrect");
           // highlight correct answer visually
           choices.forEach((c) => {
             if (c.dataset.choice === correct) c.classList.add("correct");
           });
-          feedback.textContent =
-            "Not quite — the main idea is that gender is a process shaped by culture and experience (choice B).";
-          feedback.classList.remove("success");
-          feedback.classList.add("error");
+          if (feedback) {
+            feedback.textContent = msgIncorrect;
+            feedback.classList.remove("success");
+            feedback.classList.add("error");
+          }
         }
         // set aria-pressed on choices for a11y
         choices.forEach((c) =>

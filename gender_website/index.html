@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Learning About Gender: An Interactive Essay</title>
+    <title>5 Critical Concepts Project: An Interactive Essay</title>
     <link rel="stylesheet" href="style.css" />
     <meta
       name="description"
@@ -74,13 +74,28 @@
           width: 100%;
         }
       }
+      /* Conclusion layout: place paragraph next to the self-reflection widget */
+      .conclusion-grid {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        margin-top: 0.5rem;
+      }
+      .conclusion-grid p {
+        flex: 1;
+      }
+      @media (max-width: 700px) {
+        .conclusion-grid {
+          flex-direction: column;
+        }
+      }
     </style>
   </head>
   <body>
     <main class="site">
       <header class="hero">
         <div class="hero-inner">
-          <h1 class="title">Learning About Gender</h1>
+          <h1 class="title">5 Critical Concepts Project</h1>
           <p class="subtitle">
             An interactive essay exploring gender and identity
           </p>
@@ -108,8 +123,8 @@
                 <span
                   class="kw"
                   tabindex="0"
-                  aria-label="Social and cultural meanings attached to perceived sex and identity."
-                  data-def="Social and cultural meanings attached to perceived sex and identity."
+                  aria-label="(As described in this essay) Not a fixed or innate identity, but something constructed, reinforced, and challenged through cultural narratives, scientific practices, and social expectations"
+                  data-def="(As described in this essay) Not a fixed or innate identity, but something constructed, reinforced, and challenged through cultural narratives, scientific practices, and social expectations"
                   >Gender</span
                 >
                 is a widely debated, discussed, and explored topic and for many
@@ -130,8 +145,8 @@
                 <span
                   class="kw"
                   tabindex="0"
-                  aria-label="Social and cultural meanings attached to perceived sex and identity."
-                  data-def="Social and cultural meanings attached to perceived sex and identity."
+                  aria-label="The idea that gender is rooted in biology and therefore fixed, natural, and inevitable"
+                  data-def="The idea that gender is rooted in biology and therefore fixed, natural, and inevitable"
                   >biological determinism</span
                 >
                 , which is the way Western society presents gender as 2 stable,
@@ -139,8 +154,8 @@
                 <span
                   class="kw"
                   tabindex="0"
-                  aria-label="Social and cultural meanings attached to perceived sex and identity."
-                  data-def="Social and cultural meanings attached to perceived sex and identity."
+                  aria-label="The tendency to project human social assumptions (like as gender roles) onto biology"
+                  data-def="The tendency to project human social assumptions (like as gender roles) onto biology"
                   >prescientific anthropomorphism</span
                 >
                 , which touches on how science feels like absolute truth but is
@@ -221,7 +236,7 @@
                     "
                   />
                 </div>
-                <p style="font-size: 0.55rem; margin: 0.25rem 0 0; color: #555">
+                <p style="font-size: 0.65rem; margin: 0.25rem 0 0; color: #555">
                   Move the sliders to select a number (1–10) that represents
                   your current confidence or knowledge.
                 </p>
@@ -242,8 +257,8 @@
                   <span
                     class="kw"
                     tabindex="0"
-                    aria-label="Social and cultural meanings attached to perceived sex and identity."
-                    data-def="Social and cultural meanings attached to perceived sex and identity."
+                    aria-label="The idea that gender is rooted in biology and therefore fixed, natural, and inevitable"
+                    data-def="The idea that gender is rooted in biology and therefore fixed, natural, and inevitable"
                     >biological determinism</span
                   >
                   to show how gender can be framed as something inevitable and
@@ -257,39 +272,41 @@
                   <span
                     class="kw"
                     tabindex="0"
-                    aria-label="Social and cultural meanings attached to perceived sex and identity."
-                    data-def="Social and cultural meanings attached to perceived sex and identity."
+                    aria-label="Described by Simone de Beauvoir as a fixed, innate identity or nature that one is assumed to be born with"
+                    data-def="Described by Simone de Beauvoir as a fixed, innate identity or nature that one is assumed to be born with"
                     >essence</span
                   >
                   and
                   <span
                     class="kw"
                     tabindex="0"
-                    aria-label="Social and cultural meanings attached to perceived sex and identity."
-                    data-def="Social and cultural meanings attached to perceived sex and identity."
+                    aria-label="Described by Simone de Beauvoir as the lived experience and social conditions that shape a person’s identity, including gender"
+                    data-def="Described by Simone de Beauvoir as the lived experience and social conditions that shape a person’s identity, including gender"
                     >situation</span
                   >
-                  (de Beauvoir 1949, 6). Beauvoir states that rather than being
-                  born with a fixed gender identity or essence, gender is shaped
-                  through lived experience and social conditions, or one’s
-                  situation. This separation in ideas helps us understand how
-                  something that seems like biological truth is greatly
-                  influenced by culture. In a similar way, in Heterosexualism
-                  and the Colonial/Modern Gender System, María Lugones discusses
-                  how Western colonial systems impose rigid binaries onto
-                  Indigenous communities to make them assimilate into
-                  patriarchal norms (Lugones 2007, 188). This shows that gender
-                  that appears natural is often historically produced and
-                  enforced. When we investigate work from those such as Robin
-                  Dembroff’s Why Be Nonbinary, this further complicates and
-                  challenges biological determinism by showing that gender
-                  categories are not exhaustive or fixed (Dembroff 2018).
+                  <a class="citation" href="#citations">(de Beauvoir 1949, 6)</a
+                  >. Beauvoir states that rather than being born with a fixed
+                  gender identity or essence, gender is shaped through lived
+                  experience and social conditions, or one’s situation. This
+                  separation in ideas helps us understand how something that
+                  seems like biological truth is greatly influenced by culture.
+                  In a similar way, in Heterosexualism and the Colonial/Modern
+                  Gender System, María Lugones discusses how Western colonial
+                  systems impose rigid binaries onto Indigenous communities to
+                  make them assimilate into patriarchal norms
+                  <a class="citation" href="#citations">(Lugones 2007, 188)</a>.
+                  This shows that gender that appears natural is often
+                  historically produced and enforced. When we investigate work
+                  from those such as Robin Dembroff’s Why Be Nonbinary, this
+                  further complicates and challenges biological determinism by
+                  showing that gender categories are not exhaustive or fixed
+                  <a class="citation" href="#citations">(Dembroff 2018)</a>.
                   Dembroff discusses how
                   <span
                     class="kw"
                     tabindex="0"
-                    aria-label="Social and cultural meanings attached to perceived sex and identity."
-                    data-def="Social and cultural meanings attached to perceived sex and identity."
+                    aria-label="Gender identities that fall outside the traditional binary"
+                    data-def="Gender identities that fall outside the traditional binary"
                     >nonbinary identities</span
                   >
                   reveal that gender categories fail to capture the full range
@@ -298,68 +315,33 @@
                   <br /><br />
                   These perspectives reveal that biological determinism doesn’t
                   describe gender but rather constructs ideas that align with
-                  Western cultural, historical, and political interests. This
-                  concept is helpful in showing how Western gender ideas can
-                  limit our understanding of gender and its expression.
+                  Western cultural, historical, and political interests. 
                 </p>
 
-                <blockquote class="pull-quote">
-                  “Gender is not given; it is made and remade by people and
-                  institutions.” — <cite>Author A, 2020</cite>
-                </blockquote>
-
-                <p>
-                  Learning about gender requires attention to both individual
-                  stories and broader patterns. Paying attention to lived
-                  experience and
-                  <span
-                    class="kw"
-                    tabindex="0"
-                    aria-label="How multiple identities (race, class, gender, etc.) interact to shape experience."
-                    data-def="How multiple identities (race, class, gender, etc.) interact to shape experience."
-                    >intersectionality</span
-                  >
-                  helps us see how gender expectations differ for different
-                  people.
-                </p>
-
-                <figure class="quote-figure">
-                  <blockquote>
-                    “To understand gender, listen to the stories people tell
-                    about themselves.”
-                  </blockquote>
-                  <figcaption>— <cite>Author B, 2018</cite></figcaption>
-                </figure>
-                <div class="quiz" data-correct="b" aria-labelledby="quiz-title">
+                
+                <div
+                  class="quiz"
+                  data-correct="a"
+                  data-feedback-correct="Correct! Biological determinism can present social inequalities as natural"
+                  data-feedback-incorrect="So close, but the best answer is A"
+                  aria-labelledby="quiz-title"
+                >
                   <h4 id="quiz-title" class="quiz-title">Quick check</h4>
                   <p class="quiz-question">
-                    Which statement best reflects the main idea of this section?
-                  </p>
-                  <p
-                    style="
-                      font-size: 0.85rem;
-                      margin: 0 0 8px;
-                      color: var(--muted);
-                    "
-                  >
-                    Take a moment to reflect, then pick the answer below.
+                    Why can biological determinism reinforce inequality?
                   </p>
                   <div class="quiz-choices" role="list">
                     <button type="button" class="quiz-choice" data-choice="a">
-                      A. Gender is a single, fixed category determined only by
-                      biology.
+                      A. It presents social inequalities as natural
                     </button>
                     <button type="button" class="quiz-choice" data-choice="b">
-                      B. Gender is learned and shaped by culture, context, and
-                      institutions.
+                      B. It ignores science
                     </button>
                     <button type="button" class="quiz-choice" data-choice="c">
-                      C. Gender has no relation to language, media, or
-                      education.
+                      C. It denies sex exists
                     </button>
                     <button type="button" class="quiz-choice" data-choice="d">
-                      D. Gender expectations are universal and identical across
-                      all communities.
+                      D. It denies gender exists
                     </button>
                   </div>
                   <div class="quiz-feedback" aria-live="polite"></div>
@@ -385,6 +367,11 @@
                     Lived experience and identity exploration
                   </figcaption>
                 </figure>
+                <blockquote class="pull-quote">
+                  This
+                  concept is helpful in showing how Western gender ideas can
+                  limit our understanding of gender and its expression.
+                </blockquote>
               </aside>
             </div>
           </div>
@@ -400,40 +387,61 @@
             <div class="main-idea-grid">
               <div class="text-col">
                 <p>
-                  This section expands on biological determinism by showing how
-                  science contributes to gender assumptions. Prescientific
-                  anthropomorphism defines the tendency humans have to project
-                  social assumptions like gender roles onto biology. We often
-                  view science as objective, but we need to remember it’s shaped
-                  by the cultural contexts in which it was produced.
-                  <br /><br />
+                  This section expands on
+                  <span
+                    class="kw"
+                    tabindex="0"
+                    aria-label="The idea that gender is rooted in biology and therefore fixed, natural, and inevitable"
+                    data-def="The idea that gender is rooted in biology and therefore fixed, natural, and inevitable"
+                    >biological determinism</span
+                  >
+                  by showing how science contributes to gender assumptions.
+                  <span
+                    class="kw"
+                    tabindex="0"
+                    aria-label="The tendency to project human social assumptions (like as gender roles) onto biology"
+                    data-def="The tendency to project human social assumptions (like as gender roles) onto biology"
+                    >Prescientific anthropomorphism</span
+                  >
+                  defines the tendency humans have to project social assumptions
+                  like gender roles onto biology. We often view science as
+                  objective, but we need to remember it’s shaped by the cultural
+                  contexts in which it was produced. <br /><br />
                   In Do Sex Hormones Really Exist?, Anne Fausto-Sterling
-                  investigates our scientific understanding of sex hormones and
-                  how they were influenced by pre-existing ideas about gender
-                  (Fausto-Sterling 2000, 177). As an example, hormones were
-                  historically labelled as male and female, which reinforced
-                  binary thinking even though these hormones were found
-                  throughout all bodies and organs at varying levels. These
-                  scientific findings influence how we discuss and understand
-                  our bodies and relations to them. Since it's impossible to
-                  remove these biases from scientific findings completely, we
-                  should focus on minimizing them and discussing how our
-                  perspectives influence the way we think.
+                  investigates our scientific understanding of
+                  <span
+                    class="kw"
+                    tabindex="0"
+                    aria-label="Hormones historically labeled as male or female despite existing in all bodies at varying levels"
+                    data-def="Hormones historically labeled as male or female despite existing in all bodies at varying levels"
+                    >sex hormones</span
+                  >
+                  and how they were influenced by pre-existing ideas about
+                  gender<a class="citation" href="#citations">
+                    (Fausto-Sterling 2000, 177)</a
+                  >. As an example, hormones were historically labelled as male
+                  and female, which reinforced 
+                  <span class="kw" tabindex="0" aria-label="The classification of gender into two distinct and fixed categories (male and female)" data-def="The classification of gender into two distinct and fixed categories (male and female)">binary thinking</span>
+                   even though these
+                  hormones were found throughout all bodies and organs at
+                  varying levels. These scientific findings influence how we
+                  discuss and understand our bodies and relations to them. Since
+                  it's impossible to remove these biases from scientific
+                  findings completely, we should focus on minimizing them and
+                  discussing how our perspectives influence the way we think.
                   <br /><br />
                   This is an important concept as it shows that science doesn’t
                   entirely uncover the truth about gender and can often mislead
                   and shape our ideas of it. By presenting gendered scientific
                   findings as biological facts, we reinforce the idea that
                   gender is biologically determined and ignore how our biases
-                  impact our understanding. This supports my thesis by
-                  highlighting how Western scientific practices contribute to
-                  the maintenance of gender norms.
+                  impact our understanding. 
                 </p>
 
                 <div class="callout">
-                  Reflection prompt: When did you first notice gender
-                  expectations in your life? Try writing a short note or
-                  thinking about one concrete example.
+                  Reflection prompt: Can you think of any other examples of
+                  science including bias? Try writing a short note or thinking
+                  about one concrete example.
                 </div>
               </div>
 
@@ -450,12 +458,11 @@
                     Language, media, and everyday practices
                   </figcaption>
                 </figure>
-                <figure>
-                  <img src="images/3.jpg" alt="Illustration 3" loading="lazy" />
-                  <figcaption>
-                    Lived experience and identity exploration
-                  </figcaption>
-                </figure>
+                <blockquote class="pull-quote">
+                  This supports my thesis by
+                  highlighting how Western scientific practices contribute to
+                  the maintenance of gender norms.
+                </blockquote>
               </aside>
             </div>
           </div>
@@ -471,13 +478,21 @@
                 <p>
                   Next, this section introduces gender as something that’s
                   produced through performance and repetition rather than
-                  something purely biological. Gender performativity is
-                  theorized by Judith Butler in Performative Acts and Gender
+                  something purely biological.
+                  <span
+                    class="kw"
+                    tabindex="0"
+                    aria-label="Described by Judith Butler as something we continuously do through repeated actions, behaviors, and norms"
+                    data-def="Described by Judith Butler as something we continuously do through repeated actions, behaviors, and norms"
+                    >Gender performativity</span
+                  >
+                  is theorized by Judith Butler in Performative Acts and Gender
                   Constitution and discusses how gender is something we
                   continuously do through repeated actions, behaviours, and
-                  norms (Butler 1990, 519). These performances can include how
-                  we dress, speak, and behave.
-                  <br /><br />
+                  norms
+                  <a class="citation" href="#citations">(Butler 1990, 519)</a>.
+                  These performances can include how we dress, speak, and
+                  behave. <br /><br />
                   This concept of performativity suggests that gender appears
                   stable because it’s performed consistently over time. The
                   performances are also shaped by social expectations which are
@@ -486,44 +501,34 @@
                   pushes individuals to often perform gender in recognizable
                   ways.
                   <br /><br />
-                  This concept is essential in understanding our thesis as it
-                  shifts the focus from identity being innate to something
-                  that’s produced through social interaction and expectations.
                   Western cultural narratives regulate how gender can be
                   performed which makes certain expressions seem natural while
-                  marginalizing others.
+                  marginalizing others. By recognizing gender as a performance, we can better analyze how it's regulated and used as a tool in society.
                 </p>
 
-                <div class="quiz" data-correct="b" aria-labelledby="quiz-title">
+                <div
+                  class="quiz"
+                  data-correct="c"
+                  data-feedback-correct="Correct! Gender appears stable because it is repeatedly performed over time"
+                  data-feedback-incorrect="Not quite — the correct answer is C"
+                  aria-labelledby="quiz-title"
+                >
                   <h4 id="quiz-title" class="quiz-title">Quick check</h4>
                   <p class="quiz-question">
-                    Which statement best reflects the main idea of this section?
-                  </p>
-                  <p
-                    style="
-                      font-size: 0.85rem;
-                      margin: 0 0 8px;
-                      color: var(--muted);
-                    "
-                  >
-                    Take a moment to reflect, then pick the answer below.
+                    Why does gender appear stable according to performativity?
                   </p>
                   <div class="quiz-choices" role="list">
                     <button type="button" class="quiz-choice" data-choice="a">
-                      A. Gender is a single, fixed category determined only by
-                      biology.
+                      A. It is biologically fixed
                     </button>
                     <button type="button" class="quiz-choice" data-choice="b">
-                      B. Gender is learned and shaped by culture, context, and
-                      institutions.
+                      B. It is enforced by law
                     </button>
                     <button type="button" class="quiz-choice" data-choice="c">
-                      C. Gender has no relation to language, media, or
-                      education.
+                      C. It is repeatedly performed over time
                     </button>
                     <button type="button" class="quiz-choice" data-choice="d">
-                      D. Gender expectations are universal and identical across
-                      all communities.
+                      D. It is identical across cultures
                     </button>
                   </div>
                   <div class="quiz-feedback" aria-live="polite"></div>
@@ -543,12 +548,11 @@
                     Language, media, and everyday practices
                   </figcaption>
                 </figure>
-                <figure>
-                  <img src="images/3.jpg" alt="Illustration 3" loading="lazy" />
-                  <figcaption>
-                    Lived experience and identity exploration
-                  </figcaption>
-                </figure>
+                <blockquote class="pull-quote">
+                  This concept is essential in understanding our thesis as it
+                  shifts the focus from identity being innate to something
+                  that’s produced through social interaction and expectations.
+                </blockquote>
               </aside>
             </div>
           </div>
@@ -563,29 +567,53 @@
               <div class="text-col">
                 <p>
                   In this section, we expand the discussion by showing how
-                  Western narratives of gender are not universal. Gender across
-                  cultures highlights the diverse ways societies can
+                  Western narratives of gender are not universal. <span
+                    class="kw"
+                    tabindex="0"
+                    aria-label="The idea that different societies conceptualize and organize gender in diverse ways"
+                    data-def="The idea that different societies conceptualize and organize gender in diverse ways"
+                    >Gender across cultures</span
+                  > highlights the diverse ways societies can
                   conceptualize and organize genders beyond Western frameworks.
                   <br /><br />
                   In The ‘Third Gender’ of the Inuit, Bernard Saladin d’Anglure
                   describes how Inuit communities organize genders in ways that
                   do not align with Western binaries, but rather as fluid and
-                  relational (Saladin d’Anglure 2006, 135). This is different
-                  than the structured, firm ways Western society frames gender.
-                  Similarly, Don Kulick, in his work on Brazilian travesties,
-                  illustrates how gender identity in Brazil is formed based on
-                  sexuality as well as social relations (Kulick 1998, 574).
+                  relational
+                  <a class="citation" href="#citations"
+                    >(Saladin d’Anglure 2006, 135)</a
+                  >. This is different than the structured, firm ways Western
+                  society frames gender. Similarly, Don Kulick, in his work on
+                  Brazilian
+                  <span
+                    class="kw"
+                    tabindex="0"
+                    aria-label="A form of gender identity described by Don Kulick where gender is shaped by sexuality and social relations"
+                    data-def="A form of gender identity described by Don Kulick where gender is shaped by sexuality and social relations"
+                    >travesties</span
+                  >, illustrates how gender identity in Brazil is formed based
+                  on sexuality as well as social relations
+                  <a class="citation" href="#citations">(Kulick 1998, 574)</a>.
                   Compared to the Western binary, this challenges the ideas that
                   biology determines gender. In Heterosexualism and the
                   Colonial/Modern Gender System, María Lugones argues that the
                   imposed Western gender systems erase and reshape Indigenous
-                  understandings of gender (Lugones 2007, 188). This highlights
-                  how Western gender norms are not only culturally specific but
-                  also historically enforced. Each of these pieces helps us
-                  understand various cultural and social impacts of gender.
-                  Additionally, intersectionality shows us that gender can’t be
-                  understood in isolation (Crenshaw 1989, 139). It teaches us
-                  that our identities intersect and evolve together.
+                  understandings of gender
+                  <a class="citation" href="#citations">(Lugones 2007, 188)</a>. This
+                  highlights how Western gender norms are not only culturally
+                  specific but also historically enforced. Each of these pieces
+                  helps us understand various cultural and social impacts of
+                  gender. Additionally,
+                  <span
+                    class="kw"
+                    tabindex="0"
+                    aria-label="The concept that gender cannot be understood in isolation but is interconnected with other aspects of identity"
+                    data-def="The concept that gender cannot be understood in isolation but is interconnected with other aspects of identity"
+                    >intersectionality</span
+                  >
+                  shows us that gender can’t be understood in isolation
+                  <a class="citation" href="#citations">(Crenshaw 1989, 139)</a>. It
+                  teaches us that our identities intersect and evolve together.
                   <br /><br />
                   This concept is critical as it disrupts the idea that Western
                   gender categories are universal. Instead, it reveals that
@@ -595,9 +623,9 @@
                 </p>
 
                 <div class="callout">
-                  Reflection prompt: When did you first notice gender
-                  expectations in your life? Try writing a short note or
-                  thinking about one concrete example.
+                  Reflection prompt: How does this erasure of how other cultures
+                  understand gender impact our own understanding? Try writing a
+                  short note or thinking about one concrete example.
                 </div>
               </div>
 
@@ -614,12 +642,7 @@
                     Language, media, and everyday practices
                   </figcaption>
                 </figure>
-                <figure>
-                  <img src="images/3.jpg" alt="Illustration 3" loading="lazy" />
-                  <figcaption>
-                    Lived experience and identity exploration
-                  </figcaption>
-                </figure>
+                
               </aside>
             </div>
           </div>
@@ -633,101 +656,69 @@
             <div class="main-idea-grid">
               <div class="text-col">
                 <p>
-                  This section discusses
-                  <span
-                    class="kw"
-                    tabindex="0"
-                    aria-label="Social and cultural meanings attached to perceived sex and identity."
-                    data-def="Social and cultural meanings attached to perceived sex and identity."
-                    >biological determinism</span
-                  >
-                  to show how gender can be framed as something inevitable and
-                  innate. Biological determinism is the idea that gender is
-                  rooted in biology and thus something fixed and natural. In
-                  Western society, this belief can appear neutral but disguises
-                  the power structures it reinforces by presenting inequalities
-                  as the way things are and should be. <br /><br />
-                  In The Second Sex, Simone de Beauvoir challenges this view by
-                  stating the difference between
-                  <span
-                    class="kw"
-                    tabindex="0"
-                    aria-label="Social and cultural meanings attached to perceived sex and identity."
-                    data-def="Social and cultural meanings attached to perceived sex and identity."
-                    >essence</span
-                  >
-                  and
-                  <span
-                    class="kw"
-                    tabindex="0"
-                    aria-label="Social and cultural meanings attached to perceived sex and identity."
-                    data-def="Social and cultural meanings attached to perceived sex and identity."
-                    >situation</span
-                  >
-                  (de Beauvoir 1949, 6). Beauvoir states that rather than being
-                  born with a fixed gender identity or essence, gender is shaped
-                  through lived experience and social conditions, or one’s
-                  situation. This separation in ideas helps us understand how
-                  something that seems like biological truth is greatly
-                  influenced by culture. In a similar way, in Heterosexualism
-                  and the Colonial/Modern Gender System, María Lugones discusses
-                  how Western colonial systems impose rigid binaries onto
-                  Indigenous communities to make them assimilate into
-                  patriarchal norms (Lugones 2007, 188). This shows that gender
-                  that appears natural is often historically produced and
-                  enforced. When we investigate work from those such as Robin
-                  Dembroff’s Why Be Nonbinary, this further complicates and
-                  challenges biological determinism by showing that gender
-                  categories are not exhaustive or fixed (Dembroff 2018).
-                  Dembroff discusses how
-                  <span
-                    class="kw"
-                    tabindex="0"
-                    aria-label="Social and cultural meanings attached to perceived sex and identity."
-                    data-def="Social and cultural meanings attached to perceived sex and identity."
-                    >nonbinary identities</span
-                  >
-                  reveal that gender categories fail to capture the full range
-                  of lived experiences, emphasizing that gender should be
-                  understood as open-ended rather than strictly defined.
+                  In the last section, we look at how gender remains a topic
+                  that can be difficult to understand, discuss, and question.
+                  Anxieties around gender emerge when ideas we have around
+                  gender are disrupted. Gender structures relate to our
+                  identities, social organizations, and scientific knowledge, so
+                  challenging it can feel destabilizing.
                   <br /><br />
-                  These perspectives reveal that biological determinism doesn’t
-                  describe gender but rather constructs ideas that align with
-                  Western cultural, historical, and political interests. This
-                  concept is helpful in showing how Western gender ideas can
-                  limit our understanding of gender and its expression.
+                  In Gender Ideology and the Fear of Destruction, Judith Butler
+                  describes how
+                  <span
+                    class="kw"
+                    tabindex="0"
+                    aria-label="An ideology that opposes changing or expanding understandings of gender, often framing these changes as threats to social order"
+                    data-def="An ideology that opposes changing or expanding understandings of gender, often framing these changes as threats to social order">
+                  anti-gender movements</span>
+                   construct fears around
+                  gender as a threat to social order
+                  <a class="citation" href="#citations">(Butler 2021, 5)</a>. Butler
+                  refers to this as a 
+                  <span
+                    class="kw"
+                    tabindex="0"
+                    aria-label="Described by Judith Butler as a term to describe exaggerated or imagined fears that portray gender theory as dangerous or destructive"
+                    data-def="Described by Judith Butler as a term to describe exaggerated or imagined fears that portray gender theory as dangerous or destructive"
+                   >
+                  phantasmic scene</span>, which means that fears
+                  are exaggerated to project an idea about gender theory being
+                  dangerous or destructive. These reactions show how gender
+                  isn’t neutral but is something that involves emotions and open
+                  conversations. <br /><br />
+                  This concept is helpful in understanding the thesis as it
+                  explains why the idea of gender being practiced rather than
+                  innate is often met with resistance. If gender were truly
+                  biologically determined, it would not require constructed
+                  fears to defend it. This final concept ties the project
+                  together by showing how Western gender narratives are
+                  maintained through society, science, and emotional boundaries
+                  that restrict how gender can be understood and discussed.
                 </p>
 
-                <div class="quiz" data-correct="b" aria-labelledby="quiz-title">
+                <div
+                  class="quiz"
+                  data-correct="c"
+                  data-feedback-correct="Correct! It describes an exaggerated fear about gender as a threat"
+                  data-feedback-incorrect="Not quite — the correct answer is C"
+                  aria-labelledby="quiz-title"
+                >
                   <h4 id="quiz-title" class="quiz-title">Quick check</h4>
                   <p class="quiz-question">
-                    Which statement best reflects the main idea of this section?
-                  </p>
-                  <p
-                    style="
-                      font-size: 0.85rem;
-                      margin: 0 0 8px;
-                      color: var(--muted);
-                    "
-                  >
-                    Take a moment to reflect, then pick the answer below.
+                    What is a “phantasmic scene” in gender discourse?
                   </p>
                   <div class="quiz-choices" role="list">
                     <button type="button" class="quiz-choice" data-choice="a">
-                      A. Gender is a single, fixed category determined only by
-                      biology.
+                      A. A scientific experiment
                     </button>
                     <button type="button" class="quiz-choice" data-choice="b">
-                      B. Gender is learned and shaped by culture, context, and
-                      institutions.
+                      B. A cultural ritual
                     </button>
                     <button type="button" class="quiz-choice" data-choice="c">
-                      C. Gender has no relation to language, media, or
-                      education.
+                      C. An exaggerated fear about gender as a threat
                     </button>
                     <button type="button" class="quiz-choice" data-choice="d">
-                      D. Gender expectations are universal and identical across
-                      all communities.
+                      D. A biological theory
                     </button>
                   </div>
                   <div class="quiz-feedback" aria-live="polite"></div>
@@ -762,29 +753,106 @@
       <section id="conclusion" class="section panel">
         <div class="panel-inner">
           <h2 class="section-title">Conclusion</h2>
-          <p>
-            In the last section, we look at how gender remains a topic that can
-            be difficult to understand, discuss, and question. Anxieties around
-            gender emerge when ideas we have around gender are disrupted. Gender
-            structures relate to our identities, social organizations, and
-            scientific knowledge, so challenging it can feel destabilizing.
-            <br /><br />
-            In Gender Ideology and the Fear of Destruction, Judith Butler
-            describes how anti-gender movements construct fears around gender as
-            a threat to social order (Butler 2021, 5). Butler refers to this as
-            a phantasmic scene, which means that fears are exaggerated to
-            project an idea about gender theory being dangerous or destructive.
-            These reactions show how gender isn’t neutral but is something that
-            involves emotions and open conversations.
-            <br /><br />
-            This concept is helpful in understanding the thesis as it explains
-            why the idea of gender being practiced rather than innate is often
-            met with resistance. If gender were truly biologically determined,
-            it would not require constructed fears to defend it. This final
-            concept ties the project together by showing how Western gender
-            narratives are maintained through society, science, and emotional
-            boundaries that restrict how gender can be understood and discussed.
-          </p>
+          <div class="conclusion-grid text-col">
+            <p>
+              This project was set to challenge our assumptions about gender by
+              exploring how it can be shaped through Western cultural narratives,
+              scientific practices, and anxieties. The 5 concepts of biological
+              determinism, prescientific anthropomorphism, gender as a
+              performance, gender across cultures, and anxieties around gender
+              aimed to show that gender is rich with history, opportunity,
+              culture, and freedom rather than just a set of prescribed Western
+              norms.
+              <br /><br />
+              This project also opens some questions we did not answer, such as
+              the intersection of gender with race, disability, and class or how
+              gender is treated in societies that do not have as much Western
+              impact compared to places like Canada. Additionally, we critiqued
+              existing and incomplete definitions of gender but did not
+              investigate how we can dismantle these definitions to push for a
+              more gender inclusive society. Some great next steps would include
+              expanding the analysis to explore a broader range of perspectives
+              and thinking deeply about how we can create more gender inclusive
+              communities.
+            </p>
+
+            <aside
+              class="rating-widget"
+              aria-labelledby="rating-title-revisited"
+              role="complementary"
+            >
+              <div class="rating-scale">
+                <h3 id="rating-title-revisited">Self-reflection Revisited</h3>
+              <div class="rating-item">
+                <label for="r1"
+                  >How comfortable do you feel discussing gender?
+                </label>
+              </div>
+              <div>
+                <span class="rating-value"><output>5</output></span>
+                <input
+                  id="r1"
+                  type="range"
+                  min="1"
+                  max="10"
+                  value="5"
+                  oninput="
+                    this.parentNode.querySelector('output').value = this.value
+                  "
+                />
+              </div>
+              <div class="rating-item">
+                <label for="r2">How well can you define gender? </label>
+              </div>
+              <div>
+                <span class="rating-value"><output>5</output></span
+                ><input
+                  id="r2"
+                  type="range"
+                  min="1"
+                  max="10"
+                  value="5"
+                  oninput="
+                    this.parentNode.querySelector('output').value = this.value
+                  "
+                />
+              </div>
+              <div class="rating-item">
+                <label for="r3"
+                  >How largely do you think Western cultural narratives
+                  influence your views on gender?
+                </label>
+              </div>
+              <div>
+                <span class="rating-value"><output>5</output></span>
+                <input
+                  id="r3"
+                  type="range"
+                  min="1"
+                  max="10"
+                  value="5"
+                  oninput="
+                    this.parentNode.querySelector('output').value = this.value
+                  "
+                />
+              </div>
+              <p style="font-size: 0.65rem; margin: 0.25rem 0 0; color: #555">
+                Move the sliders to select a number (1–10) that represents your
+                current confidence or knowledge.
+              </p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="medium" class="section panel">
+        <div class="panel-inner text-col">
+          <h2 class="section-title ">Medium</h2>
+            <p>
+              I chose the medium of an interactive website to present gender as a concept that requires active thinking and reflection rather than just information. The format of toggles, interactive questions, and widgets encourages exploration rather than passive reading.
+              <br /><br />
+              The intended audience is broad and meant for anyone interested in developing a deeper understanding of gender. I also designed the website with accessibility practices in mind. 
+            </p>
         </div>
       </section>
 
@@ -793,77 +861,84 @@
           <h2 class="section-title">Glossary</h2>
           <div class="glossary">
             <details>
-              <summary>Gender</summary>
+              <summary>Anti-Gender Ideology</summary>
               <p>
-                Social and cultural meanings attached to perceived sex and
-                identity.
+                An ideology that opposes changing or expanding understandings of gender, often framing these changes as threats to social order
               </p>
             </details>
             <details>
-              <summary>Sex</summary>
+              <summary>Biological Determinism</summary>
               <p>
-                Biological attributes such as chromosomes, hormones, and
-                anatomy; distinct from gender.
+                The idea that gender is rooted in biology and therefore fixed, natural, and inevitable
               </p>
             </details>
             <details>
-              <summary>Gender identity</summary>
-              <p>One's internal sense of self in relation to gender.</p>
+              <summary>Essence</summary>
+              <p>Described by Simone de Beauvoir as a fixed, innate identity or nature that one is assumed to be born with</p>
+            </details>
+            <details>
+              <summary>Gender (as framed in the essay)</summary>
+              <p>
+                Not a fixed or innate identity, but something constructed, reinforced, and challenged through cultural narratives, scientific practices, and social expectations
+              </p>
+            </details>
+            <details>
+              <summary>Gender Across Cultures</summary>
+              <p>
+                The idea that different societies conceptualize and organize gender in diverse ways
+              </p>
+            </details>
+            <details>
+              <summary>Gender Binary</summary>
+              <p>
+                The classification of gender into two distinct and fixed categories (male and female)
+              </p>
+            </details>
+            <details>
+              <summary>Gender Performativity</summary>
+              <p>
+                Described by Judith Butler as something we continuously do through repeated actions, behaviors, and norms
+              </p>
             </details>
             <details>
               <summary>Intersectionality</summary>
               <p>
-                How multiple identities (race, class, gender, etc.) interact to
-                shape experience.
+                The concept that gender cannot be understood in isolation but is interconnected with other aspects of identity
               </p>
             </details>
             <details>
-              <summary>Identity</summary>
+              <summary>Nonbinary Identities</summary>
               <p>
-                An individual's internal sense of who they are, including
-                gender.
+                Gender identities that fall outside the traditional binary
               </p>
             </details>
             <details>
-              <summary>Learning</summary>
+              <summary>Phantasmic Scene</summary>
               <p>
-                The process of acquiring knowledge, skills, or understanding
-                through study or experience.
+                Described by Judith Butler as a term to describe exaggerated or imagined fears that portray gender theory as dangerous or destructive
               </p>
             </details>
             <details>
-              <summary>Community</summary>
+              <summary>Prescientific Anthropomorphism</summary>
               <p>
-                Groups, networks, and social ties that shape belonging and
-                influence.
+                The tendency to project human social assumptions (like as gender roles) onto biology
               </p>
             </details>
             <details>
-              <summary>Lived experience</summary>
+              <summary>Sex Hormones</summary>
               <p>
-                The firsthand, real-world experiences people have that shape
-                their perspectives.
+                Hormones historically labeled as male or female despite existing in all bodies at varying levels</p>
+            </details>
+            <details>
+              <summary>Situation</summary>
+              <p>
+                Described by Simone de Beauvoir as the lived experience and social conditions that shape a person’s identity, including gender
               </p>
             </details>
             <details>
-              <summary>Inclusive</summary>
+              <summary>Travesti</summary>
               <p>
-                Practices and environments designed to welcome and support
-                diverse identities without exclusion.
-              </p>
-            </details>
-            <details>
-              <summary>Learning environments</summary>
-              <p>
-                Settings where learning occurs, including classrooms, online
-                spaces, or communities.
-              </p>
-            </details>
-            <details>
-              <summary>Identity exploration</summary>
-              <p>
-                The process of discovering, reflecting on, and expressing one's
-                personal identity.
+                A form of gender identity described by Don Kulick where gender is shaped by sexuality and social relations
               </p>
             </details>
           </div>
@@ -874,17 +949,52 @@
         <div class="panel-inner">
           <h2 class="section-title">Citations</h2>
           <ol>
-            <li>Placeholder citation 1 — Author, Year.</li>
-            <li>Placeholder citation 2 — Source, Year.</li>
+            <li>
+              Anglure, Bernard Saladin d’. 2005. “The ‘Third Gender’ of the
+              Inuit.” Diogenes 52, no. 4: 134–44.
+              https://doi-org.proxy.lib.uwaterloo.ca/10.1177/0392192105059478.
+            </li>
+            <li>
+              Butler, Judith. 1988. Performative Acts and Gender Constitution:
+              An Essay in Phenomenology and Feminist Theory. Theatre Journal 40
+              (4): 519-31.
+            </li>
+            <li>Butler, Judith. 2024. Who’s Afraid of Gender? Knopf Canada.</li>
+            <li>
+              Crenshaw, Kimberlé. 1989. Demarginalizing the Intersection of Race
+              and Sex: A Black Feminist Critique of Antidiscrimination Doctrine,
+              Feminist Theory and Antiracist Politics. University of Chicago
+              Legal Forum 1989 (1): 139–167.
+            </li>
+            <li>
+              de Beauvoir, Simone. The Second Sex. Translated by Constance Borde
+              and Sheila Malovany-Chevallier, Vintage Books, 2011. 2 vols.
+            </li>
+            <li>
+              Dembroff, Robin. 2018. “Why Be Nonbinary?” Aeon, October 30.
+              https://aeon.co/essays/nonbinary-identity-is-a-radical-stance-against-gender-segregation.
+            </li>
+            <li>
+              Fausto-Sterling, Anne. 2000. “Do Sex Hormones Really Exist?
+              (Gender becomes Chemical)”. In Sexing the Body: Gender Politics
+              and the Construction of Sexuality. Basic Books.
+            </li>
+            <li>
+              Kulick, Don. 1997. “The Gender of Brazilian Transgendered
+              Prostitutes.” American Anthropologist 99, no. 3: 574–85.
+              http://www.jstor.org.proxy.lib.uwaterloo.ca/stable/681744.
+            </li>
+            <li>
+              Lugones, María. 2007. “Heterosexualism and the Colonial/Modern
+              Gender System.” Hypatia 22, no. 1: 186–219.
+              https://doi-org.proxy.lib.uwaterloo.ca/10.1111/j.1527-2001.2007.tb01156.x.
+            </li>
           </ol>
         </div>
       </section>
 
       <footer class="site-footer">
-        <small
-          >Interactive essay — design prototype •
-          <a href="#">Privacy &amp; accessibility</a></small
-        >
+        <small>GSJ 222 5 Critical Concepts Project</small>
       </footer>
     </main>
 
