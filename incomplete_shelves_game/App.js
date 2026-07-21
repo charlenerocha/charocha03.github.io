@@ -128,13 +128,23 @@ const ITEMS = [
     action: { type: "openWordleGame" },
   },
   {
-    id: 2,
-    name: "Mirror",
-    width: 0.6,
-    image: "assets/mirror/frame.png",
-    action: { type: "mirror" },
-    verticalAlign: 80,
+    id: 1,
+    name: "Website",
+    width: 0.55,
+    image: "assets/random/briefcase.png",
+    action: {
+      type: "openLink",
+      url: "https://www.charlenerocha.com",
+    },
   },
+  // {
+  //   id: 2,
+  //   name: "Mirror",
+  //   width: 0.6,
+  //   image: "assets/mirror/frame.png",
+  //   action: { type: "mirror" },
+  //   verticalAlign: 80,
+  // },
   {
     id: 8,
     name: "Gumball",
@@ -146,14 +156,14 @@ const ITEMS = [
   },
 
   // second row
-  {
-    id: 7,
-    name: "Camera",
-    width: 0.4,
-    image: "assets/camera/dslr-camera (1).png",
-    verticalAlign: 102,
-    action: { type: "openPhotobook" },
-  },
+  // {
+  //   id: 7,
+  //   name: "Camera",
+  //   width: 0.4,
+  //   image: "assets/camera/dslr-camera (1).png",
+  //   verticalAlign: 102,
+  //   action: { type: "openPhotobook" },
+  // },
   {
     id: 14,
     name: "Food",
@@ -161,20 +171,20 @@ const ITEMS = [
     image: "assets/food/fruit.png",
     action: { type: "openFoodGame" },
   },
-  {
-    id: 4,
-    name: "Map",
-    width: 0.8,
-    image: "assets/random/map.jpg",
-    verticalAlign: 70,
-  },
-  {
-    id: 13,
-    name: "Books",
-    width: 0.9,
-    image: "assets/books/books (1).png",
-    action: { type: "openBookRecs" },
-  },
+  // {
+  //   id: 4,
+  //   name: "Map",
+  //   width: 0.8,
+  //   image: "assets/random/map.jpg",
+  //   verticalAlign: 70,
+  // },
+  // {
+  //   id: 13,
+  //   name: "Books",
+  //   width: 0.9,
+  //   image: "assets/books/books (1).png",
+  //   action: { type: "openBookRecs" },
+  // },
 
   // third row
   {
@@ -198,12 +208,12 @@ const ITEMS = [
     image: "assets/music/boombox.png",
     action: { type: "openMusicRecs" },
   },
-  {
-    id: 5,
-    name: "Piggy",
-    width: 0.5,
-    image: "assets/piggy/piggy-bank (2).png",
-  },
+  // {
+  //   id: 5,
+  //   name: "Piggy",
+  //   width: 0.5,
+  //   image: "assets/piggy/piggy-bank (2).png",
+  // },
 
   // {
   //   id: 3,
@@ -495,17 +505,17 @@ function TwoTruthsGame({ onClose }) {
     // Each entry: { statements: [s1,s2,s3], lieIndex: 0|1|2 }
     {
       statements: [
-        "I've lived in three different countries.",
-        "I can play the ukulele.",
-        "I once climbed Mount Kilimanjaro.",
+        "My favourite animal is a giraffe.",
+        "My favourite flower is a sunflower.",
+        "My favourite fruit is a passionfruit.",
       ],
       lieIndex: 2,
     },
     {
       statements: [
-        "I love spicy food.",
-        "I have a twin sibling.",
-        "I enjoy coding late at night.",
+        "Drake gave me a fistbump.",
+        "I've listened to ___.",
+        "I've been to over 30 concerts.",
       ],
       lieIndex: 1,
     },
@@ -708,7 +718,7 @@ function TwoTruthsGame({ onClose }) {
 
 // Wordle-style game shown when Monstera is clicked
 function WordleGame({ onClose }) {
-  const WORDS = ["shelf", "story", "rocha", "build", "photo", "learn", "plant"];
+  const WORDS = ["shelf", "games", "rocha", "plant"];
   const [answer, setAnswer] = useState(null);
   const [guesses, setGuesses] = useState([]);
   const [current, setCurrent] = useState("");
